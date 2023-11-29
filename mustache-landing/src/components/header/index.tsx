@@ -4,7 +4,8 @@ import Icon from "components/basic/icon";
 import { Span } from "components/basic/text";
 import { useEffect, useState } from "react";
 import Heading from "components/basic/heading";
-import { Link } from "react-scroll";
+import { Link as ScrollLink } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function Header() {
 
@@ -59,10 +60,10 @@ export default function Header() {
                     }
                 }}>
                 <Flex as="ul" $style={{ gap: "2rem" }}>
-                    <Link to="about" smooth={true} duration={500}><Span>About</Span></Link>
-                    <Link to="roadmap" smooth={true} duration={500}><Span>Roadmap</Span></Link>
-                    <Link to="team" smooth={true} duration={500}><Span>Team</Span></Link>
-                    <Link to="faq" smooth={true} duration={500}><Span>FAQ</Span></Link>
+                    <ScrollLink to="about" smooth={true} duration={500}><Span>About</Span></ScrollLink>
+                    <ScrollLink to="roadmap" smooth={true} duration={500}><Span>Roadmap</Span></ScrollLink>
+                    <ScrollLink to="team" smooth={true} duration={500}><Span>Team</Span></ScrollLink>
+                    <ScrollLink to="faq" smooth={true} duration={500}><Span>FAQ</Span></ScrollLink>
                 </Flex>
                 </Flex>
                 <Flex $style={{
@@ -73,12 +74,11 @@ export default function Header() {
                             isDark ? <Icon icon="moon" /> : <Icon icon="sun" />
                         }
                     </Flex>
-                    <Button $style={{
-                        border: "1px solid white",
-                        kind: "radius"
-                    }}>
-                        Dapp
-                    </Button>
+                    <RouterLink to="/sale">
+                        <Button $style={{ border: "1px solid white", kind: "radius" }}>
+                            Sale
+                        </Button>
+                    </RouterLink>
                 </Flex>
             </Flex>
         </Flex>

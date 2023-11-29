@@ -3,7 +3,6 @@ import { StyledAccordionItemWrapper } from "components/basic/accordion/style";
 import Flex from "components/basic/flex";
 import Heading from "components/basic/heading";
 import Icon from "components/basic/icon";
-import { P } from "components/basic/text";
 import { RefObject } from "react";
 
 interface AccordionItemProp {

@@ -5,6 +5,8 @@ import TEAM3 from 'assets/imgs/team-3.png';
 import TEAM4 from 'assets/imgs/team-4.png';
 import TEAM5 from 'assets/imgs/team-5.png';
 import TEAM6 from 'assets/imgs/team-6.png';
+import TEST1 from 'assets/imgs/1.png';
+
 
 const Imgs = {
     TEST,
@@ -13,7 +15,8 @@ const Imgs = {
     TEAM3,
     TEAM4,
     TEAM5,
-    TEAM6
+    TEAM6,
+    TEST1
 }
 
 export default Imgs;
