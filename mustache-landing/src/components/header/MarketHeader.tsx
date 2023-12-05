@@ -9,7 +9,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Link from "components/basic/link";
 import configs from "configs";
 
-export default function Header() {
+export default function MarketHeader() {
 
     const [isDark, setIsDark] = useState(false);
 
@@ -62,11 +62,9 @@ export default function Header() {
                     }
                 }}>
                     <Flex as="ul" $style={{ gap: "2rem" }}>
-                        <ScrollLink to="about" smooth={true} duration={500}><Span>About</Span></ScrollLink>
-                        <ScrollLink to="roadmap" smooth={true} duration={500}><Span>Roadmap</Span></ScrollLink>
-                        <ScrollLink to="team" smooth={true} duration={500}><Span>Team</Span></ScrollLink>
-                        <ScrollLink to="faq" smooth={true} duration={500}><Span>FAQ</Span></ScrollLink>
-                        <Link to={configs.appConfigs.path.MARKET_PREFIX}><Span>Market</Span></Link>
+                        <Link to={configs.appConfigs.path.PROFILE_PREFIX}><Span>Profile</Span></Link>
+                        <Link to={configs.appConfigs.path.COLLECTION_PREFIX}><Span>Collections</Span></Link>
+                        <Link to={configs.appConfigs.path.ACTIVITY_PREFIX}><Span>Acitivity</Span></Link>
                     </Flex>
                 </Flex>
                 <Flex $style={{

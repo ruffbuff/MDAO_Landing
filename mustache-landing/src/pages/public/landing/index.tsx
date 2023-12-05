@@ -167,7 +167,7 @@ export default function LandingPage() {
                         }
                     }}>
                         <Icon icon={'nfts'} />
-                        <Button 
+                        <Button
                             $style={{ border: "1px solid white", kind: "radius" }}
                             onClick={() => window.open('https://ruffbuff.gitbook.io/mustachedao-documentation/', '_blank')}
                         >
@@ -320,9 +320,9 @@ export default function LandingPage() {
                     <Heading gradient level={2}>ROADMAP</Heading>
                 </Flex>
                 <Span $style={{
-                            color: "#FFFFF",
-                            size: "2rem"
-                        }}>Roadmap: Genesis I</Span>
+                    color: "#FFFFF",
+                    size: "2rem"
+                }}>Roadmap: Genesis I</Span>
             </Flex>
             <Flex $style={{
                 mb: "5rem",
@@ -370,7 +370,12 @@ export default function LandingPage() {
                         background: "rgba(16, 16, 16, 0.20)",
                         radius: "25px"
                     }}>
-                        <Image src={appConstants.Imgs.TEAM1} />
+                        <Flex $style={{
+                            overflow: "hidden",
+                            radius: "1rem 1rem 0 0"
+                        }}>
+                            <Image src={appConstants.Imgs.TEAM1} />
+                        </Flex>
                         <Flex $style={{
                             fDirection: "column",
                             p: "1rem",
@@ -385,7 +390,12 @@ export default function LandingPage() {
                         background: "rgba(16, 16, 16, 0.20)",
                         radius: "25px"
                     }}>
-                        <Image src={appConstants.Imgs.TEAM3} />
+                        <Flex $style={{
+                            overflow: "hidden",
+                            radius: "1rem 1rem 0 0"
+                        }}>
+                            <Image src={appConstants.Imgs.TEAM3} />
+                        </Flex>
                         <Flex $style={{
                             fDirection: "column",
                             p: "1rem",
@@ -400,7 +410,12 @@ export default function LandingPage() {
                         background: "rgba(16, 16, 16, 0.20)",
                         radius: "25px"
                     }}>
-                        <Image src={appConstants.Imgs.TEAM4} />
+                        <Flex $style={{
+                            overflow: "hidden",
+                            radius: "1rem 1rem 0 0"
+                        }}>
+                            <Image src={appConstants.Imgs.TEAM4} />
+                        </Flex>
                         <Flex $style={{
                             fDirection: "column",
                             p: "1rem",
@@ -415,7 +430,12 @@ export default function LandingPage() {
                         background: "rgba(16, 16, 16, 0.20)",
                         radius: "25px"
                     }}>
-                        <Image src={appConstants.Imgs.TEAM2} />
+                        <Flex $style={{
+                            overflow: "hidden",
+                            radius: "1rem 1rem 0 0"
+                        }}>
+                            <Image src={appConstants.Imgs.TEAM2} />
+                        </Flex>
                         <Flex $style={{
                             fDirection: "column",
                             p: "1rem",
@@ -430,7 +450,12 @@ export default function LandingPage() {
                         background: "rgba(16, 16, 16, 0.20)",
                         radius: "25px"
                     }}>
-                        <Image src={appConstants.Imgs.TEAM5} />
+                        <Flex $style={{
+                            overflow: "hidden",
+                            radius: "1rem 1rem 0 0"
+                        }}>
+                            <Image src={appConstants.Imgs.TEAM5} />
+                        </Flex>
                         <Flex $style={{
                             fDirection: "column",
                             p: "1rem",

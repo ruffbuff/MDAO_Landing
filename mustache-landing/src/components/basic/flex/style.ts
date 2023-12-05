@@ -28,7 +28,9 @@ export interface InlineFlexPropsType {
 	right?: string
 	transform?: string
 	zIndex?: string
+	cursor?: string
 	display?: 'none' | 'flex'
+	m?:string
 }
 
 type QueryType = { [key: string]: InlineFlexPropsType };
@@ -50,6 +52,7 @@ const setStyle = ({
 	hAlign,
 	gap,
 	p,
+	m,
 	mb,
 	w,
 	minW,
@@ -67,6 +70,7 @@ const setStyle = ({
 	border,
 	left,
 	right,
+	cursor,
 	transform,
 	display,
 	zIndex
@@ -79,6 +83,7 @@ const setStyle = ({
 		${hAlign ? `justify-content:	${hAlign};` : ``}
 		${gap ? `gap:				${gap};` : ``}
 		${p ? `padding:			${p};` : ``}
+		${m ? `margin:			${m};` : ``}
 		${mb ? `margin-bottom:	${mb};` : ``}
 		${w ? `width:			${w};` : ``}
 		${minW ? `min-width:		${minW};` : ``}
@@ -87,6 +92,7 @@ const setStyle = ({
 		${h ? `height:			${h};` : ``}
 		${minH ? `min-height:		${minH};` : ``}
 		${maxH ? `max-height:		${maxH};` : ``}
+		${cursor ? `cursor:		${cursor};` : ``}
 		${background ? `background:		${background};` : ``}
 		${position ? `position:		${position};` : ``}
 		${overflow ? `overflow:		${overflow};` : ``}
