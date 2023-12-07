@@ -4,13 +4,6 @@ import Heading from "components/basic/heading";
 import { Span } from "components/basic/text";
 import appConstants from "constant";
 
-const contributions = [
-    { id: 1, date: '2023-12-01', count: 10 },
-    { id: 2, date: '2023-12-02', count: 5 },
-    { id: 3, date: '2023-12-03', count: 0 },
-    // Add more contributions as needed
-];
-
 interface ContributionTitleProps {
     date: string,
     count: number

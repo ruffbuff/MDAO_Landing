@@ -2,6 +2,7 @@ import Button from "components/basic/button";
 import Flex from "components/basic/flex";
 import Grid from "components/basic/grid";
 import Heading from "components/basic/heading";
+import Icon from "components/basic/icon";
 import Image from "components/basic/image";
 import { Input } from "components/basic/input";
 import { P, Span } from "components/basic/text";
@@ -12,26 +13,26 @@ export default function CollectionPage() {
         <Flex $style={{
             fDirection: "column",
             flex: "1",
-            vAlign:"center"
+            vAlign: "center"
         }}>
             <Flex $style={{
                 background: `url(${appConstants.Imgs.BG2})`,
                 h: "50rem",
                 mb: "10rem",
-                w:"100%"
+                w: "100%"
             }}>
                 <Flex $style={{
                     background: "linear-gradient(180deg, rgba(162, 89, 255, 0.00) 0%, #232323 100%);",
                     h: "100%",
                     w: "100%",
-                    hAlign:"center"
+                    hAlign: "center"
                 }}>
                     <Flex $style={{
                         vAlign: "flex-end",
                         hAlign: "space-between",
                         w: "100%",
                         p: "3rem 0",
-                        maxW:"1440px",
+                        maxW: "1440px",
                         queries: {
                             620: {
                                 fDirection: "column",
@@ -62,38 +63,14 @@ export default function CollectionPage() {
                                 See NFT
                             </Button>
                         </Flex>
-                        <Flex $style={{
-                            background: "rgba(59, 59, 59, 0.50);",
-                            p: "2rem",
-                            fDirection: "column",
-                            radius: "1rem"
-                        }}>
-                            <Span>Auction ends in:</Span>
-                            <Flex $style={{
-                                gap: ".5rem"
-                            }}>
-                                <Heading level={3}>59</Heading>
-                                <Heading level={3}>:</Heading>
-                                <Heading level={3}>59</Heading>
-                                <Heading level={3}>:</Heading>
-                                <Heading level={3}>59</Heading>
-                            </Flex>
-                            <Flex $style={{
-                                gap: "1rem"
-                            }}>
-                                <Span>Hours</Span>
-                                <Span>Minutes</Span>
-                                <Span>Seconds</Span>
-                            </Flex>
-                        </Flex>
                     </Flex>
                 </Flex>
             </Flex>
             <Flex $style={{
                 fDirection: "column",
                 mb: "3rem",
-                w:"100%",
-                maxW:"1440px",
+                w: "100%",
+                maxW: "1440px",
             }}>
                 <Flex $style={{
                     gap: "2rem",
@@ -169,8 +146,8 @@ export default function CollectionPage() {
                 gap: "1rem",
                 vAlign: "center",
                 mb: "3rem",
-                w:"100%",
-                maxW:"1440px",
+                w: "100%",
+                maxW: "1440px",
                 queries: {
                     768: {
                         fDirection: "column"
@@ -180,6 +157,7 @@ export default function CollectionPage() {
                 <Flex $style={{
                 }}>
                     <Span $style={{
+                        wrap: "nowrap"
                     }}>Live 7777 results</Span>
                 </Flex>
                 <Input $style={{
@@ -188,13 +166,44 @@ export default function CollectionPage() {
                 <Input $style={{
                     border: "1px solid #3B3B3B"
                 }} placeholder="Price to Low" />
+                <Flex $style={{
+                    gap: "1rem",
+                    queries: {
+                        380: {
+                            fDirection: "column"
+                        }
+                    }
+                }}>
+                    <Button $style={{
+                        bg: "#A259FF",
+                        kind: "radius"
+                    }}>
+                        <Flex $style={{
+                            gap:".5rem"
+                        }}>
+                            <Icon icon={'buy'}/>
+                            <Span>Buy</Span>
+                        </Flex>
+                    </Button>
+                    <Button $style={{
+                        border: "1px solid #A259FF",
+                        kind: "radius"
+                    }}>
+                        <Flex $style={{
+                            gap:".5rem"
+                        }}>
+                            <Icon icon={'sweep'}/>
+                            <Span>Sweep</Span>
+                        </Flex>
+                    </Button>
+                </Flex>
             </Flex>
             <Grid $style={{
                 columns: "4",
                 gap: "2rem",
                 mb: "3rem",
-                w:"100%",
-                maxW:"1440px",
+                w: "100%",
+                maxW: "1440px",
                 $queries: {
                     1380: {
                         columns: "4"

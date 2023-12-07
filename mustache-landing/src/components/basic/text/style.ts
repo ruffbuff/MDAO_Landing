@@ -8,6 +8,8 @@ export interface InlineTextPropsType {
 	mb?: string
 	align?: 'left' | 'center' | 'right'
 	maxW?: string
+	wrap? : string
+	m?: string
 }
 
 type QueryType = { [key: string]: Partial<InlineTextPropsType> };
@@ -23,6 +25,8 @@ const setStyle = ({
 	weight,
 	maxW,
 	mb,
+	wrap,
+	m,
 	align
 }: Partial<InlineTextPropsType>) => {
 	return `
@@ -30,7 +34,9 @@ const setStyle = ({
 		${size ? `font-size:			${size};` : ``}
 		${weight ? `font-weight:			${weight};` : ``}
 		${mb ? `margin-bottom:		${mb};` : ``}
+		${m ? `margin:		${m};` : ``}
 		${maxW ? `max-width:		${maxW};` : ``}
+		${wrap ? `white-space:		${wrap};` : ``}
 		${align ? `text-align:			${align};` : ``}
 	`
 }

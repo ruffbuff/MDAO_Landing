@@ -53,43 +53,44 @@ export default function MarketHeader() {
                 }}>
                     <Link to="/"><Heading level={3}>MustacheDAO</Heading></Link>
                 </Flex>
-                <Flex as="ul" $style={{
-                    gap: "2rem",
-                    queries: {
-                        860: {
-                            display: 'none'
-                        }
-                    }
-                }}>
-                    <Flex as="ul" $style={{ gap: "2rem" }}>
-                        <Link to={configs.appConfigs.path.PROFILE_PREFIX}><Span>Profile</Span></Link>
-                        <Link to={configs.appConfigs.path.COLLECTION_PREFIX}><Span>Collections</Span></Link>
-                        <Link to={configs.appConfigs.path.ACTIVITY_PREFIX}><Span>Acitivity</Span></Link>
-                    </Flex>
-                </Flex>
                 <Flex $style={{
-                    gap: "2rem"
+                    gap:"2rem"
                 }}>
-                    <Flex onClick={() => setIsDark(!isDark)}>
-                        {
-                            isDark ?
-                                <Flex $style={{
-                                    cursor: "pointer"
-                                }}>
-                                    <Icon icon="moon" />
-                                </Flex> :
-                                <Flex $style={{
-                                    cursor: "pointer"
-                                }}>
-                                    <Icon icon="sun" />
-                                </Flex>
+                    <Flex as="ul" $style={{
+                        gap: "2rem",
+                        queries: {
+                            860: {
+                                display: 'none'
+                            }
                         }
+                    }}>
+                        <Flex as="ul" $style={{ gap: "2rem" }}>
+                            <Link to={configs.appConfigs.path.PROFILE_PREFIX}><Span>Profile</Span></Link>
+                            <Link to={configs.appConfigs.path.COLLECTION_PREFIX}><Span>Collections</Span></Link>
+                        </Flex>
                     </Flex>
-                    <RouterLink to="/sale">
-                        <Button $style={{ border: "1px solid white", kind: "radius" }}>
-                            Sale
+                    <Flex $style={{
+                        gap: "2rem"
+                    }}>
+                        <Flex onClick={() => setIsDark(!isDark)}>
+                            {
+                                isDark ?
+                                    <Flex $style={{
+                                        cursor: "pointer"
+                                    }}>
+                                        <Icon icon="moon" />
+                                    </Flex> :
+                                    <Flex $style={{
+                                        cursor: "pointer"
+                                    }}>
+                                        <Icon icon="sun" />
+                                    </Flex>
+                            }
+                        </Flex>
+                        <Button $style={{ kind: "radius", bg: "#A259FF" }}>
+                            Sign up
                         </Button>
-                    </RouterLink>
+                    </Flex>
                 </Flex>
             </Flex>
         </Flex>

@@ -29,8 +29,8 @@ export const StyledButton = styled.button<StyledButtonPropsType>`
     ${({ h }) => `line-height: ${h ? h : '2.69rem'};`}
     ${({ h }) => `min-height: ${h ? h : '2.69rem'};`}
     ${({ p }) => `padding: ${p ?? '0 2rem'};`}
-    ${({ bg }) => bg ? `background: var(--${bg});` : ``}
-    ${({ color }) => color ? `color: var(--${color});` : ``}
+    ${({ bg }) => bg ? `background: ${bg};` : ``}
+    ${({ color }) => color ? `color: ${color};` : ``}
     ${({ fsize }) => fsize ? `font-size: ${fsize};` : ``}
     ${({ kind }) => {
         if (kind) {

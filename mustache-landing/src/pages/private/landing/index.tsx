@@ -64,30 +64,6 @@ export default function MpLandingPage() {
                                 See NFT
                             </Button>
                         </Flex>
-                        <Flex $style={{
-                            background: "rgba(59, 59, 59, 0.50);",
-                            p: "2rem",
-                            fDirection: "column",
-                            radius: "1rem"
-                        }}>
-                            <Span>Auction ends in:</Span>
-                            <Flex $style={{
-                                gap: ".5rem"
-                            }}>
-                                <Heading level={3}>59</Heading>
-                                <Heading level={3}>:</Heading>
-                                <Heading level={3}>59</Heading>
-                                <Heading level={3}>:</Heading>
-                                <Heading level={3}>59</Heading>
-                            </Flex>
-                            <Flex $style={{
-                                gap: "1rem"
-                            }}>
-                                <Span>Hours</Span>
-                                <Span>Minutes</Span>
-                                <Span>Seconds</Span>
-                            </Flex>
-                        </Flex>
                     </Flex>
                 </Flex>
             </Flex>
