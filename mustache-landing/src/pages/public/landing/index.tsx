@@ -129,6 +129,8 @@ export default function LandingPage() {
         <Flex $style={{
             fDirection: "column",
             vAlign: "center",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Header />
             <Flex $style={{
@@ -461,7 +463,7 @@ export default function LandingPage() {
                             p: "1rem",
                             gap: "1rem"
                         }}>
-                            <Heading level={4}>!NGU</Heading>
+                            <Heading level={4}>Tadashi</Heading>
                             <Heading gradient level={5}>Front-end Dev</Heading>
                         </Flex>
                     </Flex>

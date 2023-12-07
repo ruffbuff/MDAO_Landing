@@ -8,13 +8,17 @@ import Image from "components/basic/image"
 import appConstants from "constant"
 import Button from "components/basic/button"
 import Grid from "components/basic/grid"
+import { Input } from "components/basic/input"
+import Icon from "components/basic/icon"
 
 export default function MpLandingPage() {
     return (
         <Flex $style={{
             fDirection: "column",
             w: "100%",
-            vAlign:"center"
+            vAlign:"center",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Flex $style={{
                 background: `url(${appConstants.Imgs.BG2})`,
@@ -583,6 +587,139 @@ export default function MpLandingPage() {
                         </Flex>
                     </Flex>
                 </Grid>
+            </Flex>
+            <Flex $style={{
+                fDirection: "column",
+                gap: "2rem",
+                mb: "5rem",
+                w:"100%",
+                maxW:"1440px"
+            }}>
+                <Flex $style={{
+                    fDirection: "column"
+                }}>
+                    <Heading level={3}>How It Works</Heading>
+                    <Span>Find out how to get started</Span>
+                </Flex>
+                <Grid $style={{
+                    columns: "3",
+                    gap: "2rem",
+                    $queries:{
+                        980:{
+                            columns:"2"
+                        },
+                        680:{
+                            columns:"1"
+                        }
+                    }
+                }}>
+                    <Flex $style={{
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        fDirection: "column",
+                        vAlign: "center",
+                        p: "2rem 1rem"
+                    }}>
+                        <Icon icon="s-wallet" />
+                        <Flex $style={{
+                            fDirection: "column",
+                            vAlign: "center",
+                            gap: ".5rem"
+                        }}>
+                            <Heading level={4}>Setup your wallet</Heading>
+                            <P $style={{
+                                align: "center"
+                            }}>Set up your wallet of choice. Connect it to the Animarket by clicking the wallet icon in the top right corner.</P>
+                        </Flex>
+                    </Flex>
+                    <Flex $style={{
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        fDirection: "column",
+                        vAlign: "center",
+                        p: "2rem 1rem"
+                    }}>
+                        <Icon icon="s-collection" />
+                        <Flex $style={{
+                            fDirection: "column",
+                            vAlign: "center",
+                            gap: ".5rem"
+                        }}>
+                            <Heading level={4}>Create Collection</Heading>
+                            <P $style={{
+                                align: "center"
+                            }}>Upload your work and setup your collection. Add a description, social links and floor price.</P>
+                        </Flex>
+                    </Flex>
+                    <Flex $style={{
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        fDirection: "column",
+                        vAlign: "center",
+                        p: "2rem 1rem"
+                    }}>
+                        <Icon icon="s-earn" />
+                        <Flex $style={{
+                            fDirection: "column",
+                            vAlign: "center",
+                            gap: ".5rem"
+                        }}>
+                            <Heading level={4}>Start Earning</Heading>
+                            <P $style={{
+                                align: "center"
+                            }}>Choose between auctions and fixed-price listings. Start earning by selling your NFTs or trading others.</P>
+                        </Flex>
+                    </Flex>
+                </Grid>
+            </Flex>
+            <Flex $style={{
+                background: "rgba(16,16,16,.2)",
+                vAlign: "center",
+                gap: "3rem",
+                radius: "2rem",
+                mb: "5rem",
+                w:"100%",
+                maxW:"1440px"
+            }}>
+                <Flex $style={{
+                    queries:{
+                        880:{
+                            display:"none"
+                        }
+                    }
+                }}>
+                <Image src={appConstants.Imgs.BG3} />
+                </Flex>
+                <Flex $style={{
+                    fDirection: "column",
+                    gap: "1rem",
+                    queries:{
+                        880:{
+                            p:"2rem"
+                        }
+                    }
+                }}>
+                    <Flex $style={{
+                        fDirection: "column",
+                        gap: ".5rem"
+                    }}>
+                        <Heading level={3}>Join Our Weekly Digest</Heading>
+                        <P>Get exclusive promotions & updates straight to your inbox.</P>
+                    </Flex>
+                    <Flex $style={{
+                        gap: "1rem"
+                    }}>
+                        <Input $style={{
+                            bg: "white"
+                        }} placeholder="Enter your email here" />
+                        <Button $style={{
+                            bg: "#A259FF",
+                            kind: "radius"
+                        }}>
+                            Subscribe
+                        </Button>
+                    </Flex>
+                </Flex>
             </Flex>
         </Flex>
     )

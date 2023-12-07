@@ -1,4 +1,3 @@
-import React from 'react';
 import { RouterProvider } from "react-router-dom";
 import mainRouter from "routes";
 import GlobalStyle from "style/globalStyle";
@@ -10,6 +9,8 @@ import {
   trustWallet,
   rainbowWallet,
 } from "@thirdweb-dev/react";
+import { Provider } from 'react-redux';
+import store from 'store';
 
 function App() {
   return (
@@ -26,7 +27,9 @@ function App() {
       ]}
     >
       <GlobalStyle />
-      <RouterProvider router={mainRouter} />
+      <Provider store={store}>
+        <RouterProvider router={mainRouter} />
+      </Provider>
     </ThirdwebProvider>
     </>
   );

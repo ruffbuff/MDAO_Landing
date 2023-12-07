@@ -1,6 +1,6 @@
 import configs from "configs";
-import ActivityPage from "pages/private/activity";
 import CollectionPage from "pages/private/collection";
+import DetailPage from "pages/private/detail";
 import MpLandingPage from "pages/private/landing";
 import ProfilePage from "pages/private/profile";
 
@@ -18,8 +18,8 @@ const privateRoutes = [
         element: <CollectionPage />
     },
     {
-        path: configs.appConfigs.path.ACTIVITY_PREFIX,
-        element: <ActivityPage />
+        path: configs.appConfigs.path.DETAIL_PREFIX,
+        element: <DetailPage />
     }
 ]
 

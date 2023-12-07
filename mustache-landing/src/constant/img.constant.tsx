@@ -8,6 +8,7 @@ import TEAM6 from 'assets/imgs/team-6.png';
 import TEST1 from 'assets/imgs/1.png';
 
 import BG2 from 'assets/imgs/bg-2.png';
+import BG3 from 'assets/imgs/bg-3.png';
 
 import Avatar6 from 'assets/imgs/avatar-1.png';
 import Avatar7 from 'assets/imgs/avatar-2.png';
@@ -19,6 +20,12 @@ import NFT2 from 'assets/imgs/nft-2.png';
 import NFT3 from 'assets/imgs/nft-3.png';
 
 import Banner from 'assets/imgs/banner.png';
+
+import ECLISPSE1 from 'assets/imgs/eclipse-1.png';
+import ECLISPSE2 from 'assets/imgs/eclipse-2.png';
+import ECLISPSE3 from 'assets/imgs/eclipse-3.png';
+
+import DETAIL from 'assets/imgs/detail.png';
 
 const Imgs = {
     TEST,
@@ -34,10 +41,15 @@ const Imgs = {
     Avatar8,
     Avatar9,
     BG2,
+    BG3,
     NFT1,
     NFT2,
     NFT3,
-    Banner
+    Banner,
+    ECLISPSE1,
+    ECLISPSE2,
+    ECLISPSE3,
+    DETAIL
 }
 
 export default Imgs;

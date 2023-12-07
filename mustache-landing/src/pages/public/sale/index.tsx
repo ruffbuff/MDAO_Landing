@@ -60,7 +60,9 @@ const SalePage = () => {
     <Flex $style={{
       fDirection: "column",
       minH: "100vh",
-      vAlign: "center"
+      vAlign: "center",
+      position:"relative",
+      zIndex:"1"
     }}>
       <SaleHeader />
       <Flex $style={{
