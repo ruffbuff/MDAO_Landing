@@ -77,7 +77,7 @@ const GlobalStyle = createGlobalStyle`
 		color: ${GV('color')};
 		font-size: ${GV('font-size')};
 		overflow-x: hidden;
-		transition: all .9s;
+		transition: all .3s;
 		backdrop-filter: blur(150.5px);
 
 	}
