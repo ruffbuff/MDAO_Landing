@@ -4,14 +4,15 @@ import Icon from "components/basic/icon";
 import { Span } from "components/basic/text";
 import { useEffect, useState } from "react";
 import Heading from "components/basic/heading";
-import { Link as ScrollLink } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
 import Link from "components/basic/link";
 import configs from "configs";
+import { useDispatch } from "react-redux";
+import { actions as appActions } from "store/app.slice";
 
 export default function MarketHeader() {
 
     const [isDark, setIsDark] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setDarkMode();
@@ -19,6 +20,7 @@ export default function MarketHeader() {
 
     const setDarkMode = () => {
         document.body.classList.toggle('dark-theme');
+        dispatch(appActions.toggleMode());
     }
 
     return (
@@ -26,6 +28,8 @@ export default function MarketHeader() {
             vAlign: "center",
             w: "100%",
             hAlign: "center",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Flex $style={{
                 maxW: "1440px",

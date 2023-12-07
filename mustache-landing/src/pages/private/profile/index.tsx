@@ -62,6 +62,8 @@ const ContributionOverview = ({ year }: ContributionOverviewProps) => {
             fDirection: "column",
             vAlign: "center",
             mb: "10rem",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Flex $style={{
                 w: "100%",
@@ -230,7 +232,9 @@ export default function ProfilePage() {
         <Flex $style={{
             fDirection: "column",
             w: "100%",
-            vAlign: "center"
+            vAlign: "center",
+            position: "relative",
+            zIndex: "1"
         }}>
 
             <Flex $style={{
@@ -244,21 +248,21 @@ export default function ProfilePage() {
                     position: "relative"
                 }}>
                     <Flex $style={{
-                        w:"100%",
-                        hAlign:"center"
+                        w: "100%",
+                        hAlign: "center"
                     }}>
                         <Flex $style={{
-                            w:"100%",
-                            maxW:"1440px",
-                            transform:"translateY(50%)",
+                            w: "100%",
+                            maxW: "1440px",
+                            transform: "translateY(50%)",
                             p: "2rem 0rem 2rem 0rem",
-                            queries:{
+                            queries: {
                                 480: {
                                     p: "2rem"
                                 }
                             }
                         }}>
-                        <Image src={appConstants.Imgs.Avatar6} />
+                            <Image src={appConstants.Imgs.Avatar6} />
                         </Flex>
                     </Flex>
                 </Flex>

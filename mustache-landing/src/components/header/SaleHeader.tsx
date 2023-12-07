@@ -7,9 +7,12 @@ import {
 } from "@thirdweb-dev/react";
 import Link from "components/basic/link";
 import { Span } from "components/basic/text";
+import { useDispatch } from "react-redux";
+import { actions as appActions } from "store/app.slice";
 
 const SaleHeader = () => {
   const [isDark, setIsDark] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setDarkMode();
@@ -17,10 +20,14 @@ const SaleHeader = () => {
 
   const setDarkMode = () => {
     document.body.classList.toggle('dark-theme');
+    dispatch(appActions.toggleMode());
   }
 
   return (
-    <Flex $style={{ vAlign: "center", w: "100%", hAlign: "center" }}>
+    <Flex $style={{
+      vAlign: "center", w: "100%", hAlign: "center", position: "relative",
+      zIndex: "1"
+    }}>
       <Flex $style={{ maxW: "1440px", w: "100%", vAlign: "center", hAlign: "space-between", p: "1rem" }}>
         <Link to="/"><Heading level={3}>MustacheDAO</Heading></Link>
         <Link to="/" >

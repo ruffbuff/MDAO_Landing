@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import Heading from "components/basic/heading";
 import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
+import { actions as appActions } from "store/app.slice";
 import Link from "components/basic/link";
 import configs from "configs";
+import { useDispatch } from "react-redux";
 
 export default function Header() {
 
     const [isDark, setIsDark] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setDarkMode();
@@ -19,6 +22,8 @@ export default function Header() {
 
     const setDarkMode = () => {
         document.body.classList.toggle('dark-theme');
+        dispatch(appActions.toggleMode());
+
     }
 
     return (
@@ -26,6 +31,8 @@ export default function Header() {
             vAlign: "center",
             w: "100%",
             hAlign: "center",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Flex $style={{
                 maxW: "1440px",

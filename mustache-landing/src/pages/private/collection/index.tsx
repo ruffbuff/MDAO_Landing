@@ -5,7 +5,9 @@ import Heading from "components/basic/heading";
 import Icon from "components/basic/icon";
 import Image from "components/basic/image";
 import { Input } from "components/basic/input";
+import Link from "components/basic/link";
 import { P, Span } from "components/basic/text";
+import configs from "configs";
 import appConstants from "constant";
 
 export default function CollectionPage() {
@@ -13,7 +15,9 @@ export default function CollectionPage() {
         <Flex $style={{
             fDirection: "column",
             flex: "1",
-            vAlign: "center"
+            vAlign: "center",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Flex $style={{
                 background: `url(${appConstants.Imgs.BG2})`,
@@ -179,9 +183,9 @@ export default function CollectionPage() {
                         kind: "radius"
                     }}>
                         <Flex $style={{
-                            gap:".5rem"
+                            gap: ".5rem"
                         }}>
-                            <Icon icon={'buy'}/>
+                            <Icon icon={'buy'} />
                             <Span>Buy</Span>
                         </Flex>
                     </Button>
@@ -190,9 +194,9 @@ export default function CollectionPage() {
                         kind: "radius"
                     }}>
                         <Flex $style={{
-                            gap:".5rem"
+                            gap: ".5rem"
                         }}>
-                            <Icon icon={'sweep'}/>
+                            <Icon icon={'sweep'} />
                             <Span>Sweep</Span>
                         </Flex>
                     </Button>
@@ -219,416 +223,374 @@ export default function CollectionPage() {
                     }
                 }
             }}>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT1})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT3})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT1})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT2})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT3})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT1})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT3})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
+                </Link>
+                <Link to={configs.appConfigs.path.MARKET_PREFIX + configs.appConfigs.path.DETAIL_PREFIX} $style={{
+                    w: "100%"
                 }}>
                     <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT1})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
                         fDirection: "column",
-                        gap: "1rem"
+                        background: "rgba(16,16,16,.2)",
+                        radius: "1rem",
+                        w: "100%"
                     }}>
                         <Flex $style={{
-                            fDirection: "column"
+                            background: `url(${appConstants.Imgs.NFT1})`,
+                            radius: "2rem 2rem 0 0",
+                            overflow: "hidden",
+                            h: "15rem"
                         }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
                         </Flex>
                         <Flex $style={{
-                            hAlign: "space-between"
+                            p: "2rem",
+                            fDirection: "column",
+                            gap: "1rem"
                         }}>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Heading level={5}>Distant Galaxy</Heading>
+                                <Span>MoonDancer</Span>
                             </Flex>
                             <Flex $style={{
-                                fDirection: "column"
+                                hAlign: "space-between"
                             }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
+                                <Flex $style={{
+                                    fDirection: "column"
+                                }}>
+                                    <Span>Price</Span>
+                                    <Span>1.63 ETH</Span>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
-                }}>
-                    <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT2})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
-                        fDirection: "column",
-                        gap: "1rem"
-                    }}>
-                        <Flex $style={{
-                            fDirection: "column"
-                        }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
-                        </Flex>
-                        <Flex $style={{
-                            hAlign: "space-between"
-                        }}>
-                            <Flex $style={{
-                                fDirection: "column"
-                            }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
-                            </Flex>
-                            <Flex $style={{
-                                fDirection: "column"
-                            }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
-                            </Flex>
-                        </Flex>
-                    </Flex>
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    background: "rgba(16,16,16,.2)",
-                    radius: "1rem"
-                }}>
-                    <Flex $style={{
-                        background: `url(${appConstants.Imgs.NFT3})`,
-                        radius: "2rem 2rem 0 0",
-                        overflow: "hidden",
-                        h: "15rem"
-                    }}>
-                    </Flex>
-                    <Flex $style={{
-                        p: "2rem",
-                        fDirection: "column",
-                        gap: "1rem"
-                    }}>
-                        <Flex $style={{
-                            fDirection: "column"
-                        }}>
-                            <Heading level={5}>Distant Galaxy</Heading>
-                            <Span>MoonDancer</Span>
-                        </Flex>
-                        <Flex $style={{
-                            hAlign: "space-between"
-                        }}>
-                            <Flex $style={{
-                                fDirection: "column"
-                            }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
-                            </Flex>
-                            <Flex $style={{
-                                fDirection: "column"
-                            }}>
-                                <Span>Price</Span>
-                                <Span>1.63 ETH</Span>
-                            </Flex>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                </Link>
             </Grid>
         </Flex>
     )

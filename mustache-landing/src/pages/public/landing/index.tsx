@@ -129,6 +129,8 @@ export default function LandingPage() {
         <Flex $style={{
             fDirection: "column",
             vAlign: "center",
+            position: "relative",
+            zIndex: "1"
         }}>
             <Header />
             <Flex $style={{
