@@ -73,7 +73,7 @@ export default function Header() {
                         <ScrollLink to="roadmap" smooth={true} duration={500}><Span>Roadmap</Span></ScrollLink>
                         <ScrollLink to="team" smooth={true} duration={500}><Span>Team</Span></ScrollLink>
                         <ScrollLink to="faq" smooth={true} duration={500}><Span>FAQ</Span></ScrollLink>
-                        <Link to={configs.appConfigs.path.MARKET_PREFIX}><Span>Market</Span></Link>
+                        {/* <Link to={configs.appConfigs.path.MARKET_PREFIX}><Span>Market</Span></Link> */}
                     </Flex>
                 </Flex>
                 <Flex $style={{
