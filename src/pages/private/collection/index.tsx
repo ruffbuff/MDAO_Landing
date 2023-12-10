@@ -3,7 +3,7 @@ import Flex from "components/basic/flex";
 import Grid from "components/basic/grid";
 import Heading from "components/basic/heading";
 import Icon from "components/basic/icon";
-import Image from "components/basic/image";
+// import Image from "components/basic/image";
 import { Input } from "components/basic/input";
 import Link from "components/basic/link";
 import { P, Span } from "components/basic/text";

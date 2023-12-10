@@ -8,7 +8,7 @@ import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
 import { actions as appActions } from "store/app.slice";
 import Link from "components/basic/link";
-import configs from "configs";
+// import configs from "configs";
 import { useDispatch } from "react-redux";
 
 export default function Header() {

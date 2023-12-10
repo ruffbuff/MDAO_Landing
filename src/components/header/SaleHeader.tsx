@@ -2,9 +2,7 @@ import Flex from "components/basic/flex";
 import Heading from "components/basic/heading";
 import { useEffect, useState } from "react";
 import Icon from "components/basic/icon";
-import {
-  ConnectWallet
-} from "@thirdweb-dev/react";
+import { ConnectWallet } from "@thirdweb-dev/react";
 import Link from "components/basic/link";
 import { Span } from "components/basic/text";
 import { useDispatch } from "react-redux";

@@ -1,4 +1,3 @@
-import Button from "components/basic/button";
 import Flex from "components/basic/flex";
 import Icon from "components/basic/icon";
 import { Span } from "components/basic/text";
@@ -8,8 +7,9 @@ import Link from "components/basic/link";
 import configs from "configs";
 import { useDispatch } from "react-redux";
 import { actions as appActions } from "store/app.slice";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
-export default function MarketHeader() {
+function MarketHeader() {
 
     const [isDark, setIsDark] = useState(false);
     const dispatch = useDispatch();
@@ -69,8 +69,8 @@ export default function MarketHeader() {
                         }
                     }}>
                         <Flex as="ul" $style={{ gap: "2rem" }}>
+                            <Link to={configs.appConfigs.path.PUBLIC_PREFIX}><Span>Home</Span></Link>
                             <Link to={configs.appConfigs.path.PROFILE_PREFIX}><Span>Profile</Span></Link>
-                            <Link to={configs.appConfigs.path.COLLECTION_PREFIX}><Span>Collections</Span></Link>
                         </Flex>
                     </Flex>
                     <Flex $style={{
@@ -91,12 +91,19 @@ export default function MarketHeader() {
                                     </Flex>
                             }
                         </Flex>
-                        <Button $style={{ kind: "radius", bg: "#A259FF" }}>
-                            Sign up
-                        </Button>
+                        <ConnectWallet
+                            theme={"dark"}
+                            btnTitle={"Welcome"}
+                            modalTitle={"Choose your wallet"}
+                            switchToActiveChain={true}
+                            modalSize={"compact"}
+                            welcomeScreen={{ title: "Welcome" }}
+                        />
                     </Flex>
                 </Flex>
             </Flex>
         </Flex>
     )
 }
+
+export default MarketHeader;

@@ -624,8 +624,6 @@ export default function ProfilePage() {
                     </Flex>
                 </Grid>
             </TabContent>
-            <TabContent isActive={1 === activeTab}>
-            </TabContent>
             <TabContent isActive={2 === activeTab}>
                 <ContributionOverview year={2023} />
             </TabContent>

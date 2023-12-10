@@ -31,6 +31,8 @@ export interface InlineFlexPropsType {
 	cursor?: string
 	display?: 'none' | 'flex'
 	m?:string
+	hoverbackground?: string
+	transition?: string
 }
 
 type QueryType = { [key: string]: InlineFlexPropsType };
@@ -73,7 +75,8 @@ const setStyle = ({
 	cursor,
 	transform,
 	display,
-	zIndex
+	zIndex,
+	hoverbackground
 }: InlineFlexPropsType) => {
 	return `
 		${flex ? `flex:			${flex};` : ``}
@@ -110,6 +113,13 @@ const setStyle = ({
 				padding: 0 ${between};
 			}
 		` : ``}
+		${hoverbackground ? `
+            &:hover {
+                background: ${hoverbackground};
+                transform: scale(1.05);
+                transition: background 0.3s ease, transform 0.3s ease;
+            }
+        ` : ''}
 	`
 }
 
