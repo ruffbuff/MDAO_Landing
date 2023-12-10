@@ -12,19 +12,17 @@ import Link from "components/basic/link";
 import { useDispatch } from "react-redux";
 
 export default function Header() {
-
     const [isDark, setIsDark] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
+        const setDarkMode = () => {
+            document.body.classList.toggle('dark-theme');
+            dispatch(appActions.toggleMode());
+        };
+    
         setDarkMode();
-    }, [isDark])
-
-    const setDarkMode = () => {
-        document.body.classList.toggle('dark-theme');
-        dispatch(appActions.toggleMode());
-
-    }
+    }, [isDark, dispatch]);
 
     return (
         <Flex $style={{

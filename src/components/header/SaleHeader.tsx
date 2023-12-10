@@ -2,7 +2,7 @@ import Flex from "components/basic/flex";
 import Heading from "components/basic/heading";
 import { useEffect, useState } from "react";
 import Icon from "components/basic/icon";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Link from "components/basic/link";
 import { Span } from "components/basic/text";
 import { useDispatch } from "react-redux";
@@ -51,14 +51,13 @@ const SaleHeader = () => {
                 </Flex>
             }
           </Flex>
-          <ConnectWallet
-            theme={"dark"}
-            btnTitle={"Welcome"}
-            modalTitle={"Choose your wallet"}
-            switchToActiveChain={true}
-            modalSize={"compact"}
-            welcomeScreen={{ title: "Welcome" }}
-          />
+          <ConnectButton
+                            label="Welcome"
+                            accountStatus={{
+                                smallScreen: 'avatar',
+                                largeScreen: 'full',
+                            }}
+                        />
         </Flex>
       </Flex>
     </Flex>

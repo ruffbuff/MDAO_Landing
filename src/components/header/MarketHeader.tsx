@@ -7,7 +7,7 @@ import Link from "components/basic/link";
 import configs from "configs";
 import { useDispatch } from "react-redux";
 import { actions as appActions } from "store/app.slice";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function MarketHeader() {
 
@@ -91,13 +91,12 @@ function MarketHeader() {
                                     </Flex>
                             }
                         </Flex>
-                        <ConnectWallet
-                            theme={"dark"}
-                            btnTitle={"Welcome"}
-                            modalTitle={"Choose your wallet"}
-                            switchToActiveChain={true}
-                            modalSize={"compact"}
-                            welcomeScreen={{ title: "Welcome" }}
+                        <ConnectButton
+                            label="Welcome"
+                            accountStatus={{
+                                smallScreen: 'avatar',
+                                largeScreen: 'full',
+                            }}
                         />
                     </Flex>
                 </Flex>

@@ -14,29 +14,36 @@ const TrendingCollection: React.FC<TrendingCollectionProps> = ({ contractAddress
     const [nftImages, setNftImages] = useState<string[]>([]);
     const [remainingNfts, setRemainingNfts] = useState<number>(0);
     const [collectionName, setCollectionName] = useState<string>(collectionTitle);
+    const [fetchedData, setFetchedData] = useState<any>(null);
 
     useEffect(() => {
         const fetchNFTs = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-    
                 const options = { method: 'GET', headers: { accept: 'application/json' } };
                 const response = await fetch(`https://polygon-mainnet.g.alchemy.com/nft/v3/${process.env.REACT_APP_ALCHEMY_API_KEY}/getNFTsForContract?contractAddress=${contractAddress}&withMetadata=true&startToken=1`, options);
                 const data = await response.json();
-                const images = data.nfts.map((nft: any) => nft.image.originalUrl).slice(0, 3);
-                setNftImages(images);
-                const totalSupply = parseInt(data.nfts[0].contract.totalSupply);
-                setRemainingNfts(Math.max(totalSupply - 3, 0));
-                if (!collectionName) {
-                    setCollectionName(data.nfts[0].contract.name);
-                }
+                setFetchedData(data); // Store fetched data
             } catch (error) {
                 console.error('Error fetching NFT data', error);
             }
         };
-    
+
         fetchNFTs();
-    }, [contractAddress, collectionTitle]);    
+    }, [contractAddress, collectionTitle]);
+
+    useEffect(() => {
+        // Process fetched data
+        if (fetchedData) {
+            const images = fetchedData.nfts.map((nft: any) => nft.image.originalUrl).slice(0, 3);
+            setNftImages(images);
+            const totalSupply = parseInt(fetchedData.nfts[0].contract.totalSupply);
+            setRemainingNfts(Math.max(totalSupply - 3, 0));
+            if (!collectionTitle) {
+                setCollectionName(fetchedData.nfts[0].contract.name);
+            }
+        }
+    }, [fetchedData, collectionTitle]); 
 
     return (
         <Flex $style={{ gap: "2rem", fDirection: "column", mb: "6rem", maxW: "1440px" }}>
