@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-, "webpack.config.js", "ethereum.d.ts"  ]
+, "webpack.config.js" ]
 }
