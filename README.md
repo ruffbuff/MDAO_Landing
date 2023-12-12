@@ -1,8 +1,7 @@
 # MustacheDAO Landing page + MustachePlace MP
 Front-end developed by:
-```bash
 [Tadashi](https://github.com/shinobi8894)
-```
+
 Back-end developed by:
 ```solidity
     ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██

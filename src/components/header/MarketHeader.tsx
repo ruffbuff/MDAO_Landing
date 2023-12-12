@@ -1,27 +1,27 @@
 import Flex from "components/basic/flex";
 import Icon from "components/basic/icon";
 import { Span } from "components/basic/text";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Heading from "components/basic/heading";
 import Link from "components/basic/link";
 import configs from "configs";
 import { useDispatch } from "react-redux";
 import { actions as appActions } from "store/app.slice";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectWallet, darkTheme } from "@thirdweb-dev/react";
+import './MarketHeader.css';
 
 function MarketHeader() {
-
     const [isDark, setIsDark] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setDarkMode();
-    }, [isDark])
+        const setDarkMode = () => {
+            document.body.classList.toggle('dark-theme');
+            dispatch(appActions.toggleMode());
+        };
 
-    const setDarkMode = () => {
-        document.body.classList.toggle('dark-theme');
-        dispatch(appActions.toggleMode());
-    }
+        setDarkMode();
+    }, [isDark, dispatch]);
 
     return (
         <Flex $style={{
@@ -70,6 +70,8 @@ function MarketHeader() {
                     }}>
                         <Flex as="ul" $style={{ gap: "2rem" }}>
                             <Link to={configs.appConfigs.path.PUBLIC_PREFIX}><Span>Home</Span></Link>
+                            {/*<Link to={configs.appConfigs.path.SALE_PREFIX}><Span>Pre-sale</Span></Link>*/}
+                            <Link to={configs.appConfigs.path.MARKET_PREFIX}><Span>Market</Span></Link>
                             <Link to={configs.appConfigs.path.PROFILE_PREFIX}><Span>Profile</Span></Link>
                         </Flex>
                     </Flex>
@@ -91,12 +93,21 @@ function MarketHeader() {
                                     </Flex>
                             }
                         </Flex>
-                        <ConnectButton
-                            label="Welcome"
-                            accountStatus={{
-                                smallScreen: 'avatar',
-                                largeScreen: 'full',
-                            }}
+                        <ConnectWallet
+                            theme={darkTheme({
+                                fontFamily: "Inter, sans-serif",
+                                colors: {
+                                  modalBg: "#300146",
+                                  accentText: "purple",
+                                  walletSelectorButtonHoverBg: "#42125a",
+                                  separatorLine: "#ffffff"
+                                },
+                            })}
+                            btnTitle={"Connect"}
+                            modalTitle={"Choose your wallet"}
+                            switchToActiveChain={true}
+                            modalSize={"compact"}
+                            welcomeScreen={{ title: "Welcome" }}
                         />
                     </Flex>
                 </Flex>

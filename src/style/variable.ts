@@ -2,7 +2,7 @@ const variables = {
     'primary': '#5D6DFD',
     'danger': '#E03F3F',
 
-    'bg': '#27E5FF',
+    'bg': '#44ac73',
     'bg-dark': '#232323',
     'color': '#FFFFFF',
     'font-gradient': 'linear-gradient(90deg, #FF9B63 0.02%, #FFE500 96.7%)',

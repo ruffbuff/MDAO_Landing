@@ -6,7 +6,7 @@ import Heading from "components/basic/heading";
 import { Span } from "components/basic/text";
 import Image from "components/basic/image";
 import { Tr, Td } from "components/basic/table";
-import { CONTRACT_ABI_2, CONTRACT_ADDRESS_2 } from "../../../preSaleContract";
+import { CONTRACT_ABI_2, CONTRACT_ADDRESS_2 } from "../../../solContracts";
 
 interface CollectionData {
     name: string;
@@ -24,13 +24,14 @@ const NFTCollectionFetcher = () => {
     const [trumpDtcS2Data, setTrumpDtcS2Data] = useState<CollectionData>({ name: '', totalSupply: '', imageUrl: '', totalSold: 0, floorPrice: '' });
 
     useEffect(() => {
-        const alchemyProviderUrl = "https://polygon-mainnet.g.alchemy.com/v2/0QHDGVtInkstSYcCyYwk1rsbYwbxmpW6";
+        const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
+        const alchemyProviderUrl = `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}`;
         const provider = new ethers.providers.JsonRpcProvider(alchemyProviderUrl);
         const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider);
 
         const fetchTotalSupply = async (contractAddress: string) => {
             const options = { method: 'GET', headers: { accept: 'application/json' } };
-            const response = await fetch(`https://polygon-mainnet.g.alchemy.com/nft/v3/0QHDGVtInkstSYcCyYwk1rsbYwbxmpW6/getContractMetadata?contractAddress=${contractAddress}`, options);
+            const response = await fetch(`https://polygon-mainnet.g.alchemy.com/nft/v3/${apiKey}/getContractMetadata?contractAddress=${contractAddress}`, options);
             const data = await response.json();
             return data.totalSupply;
         };
@@ -109,7 +110,7 @@ const NFTCollectionFetcher = () => {
                 </Td>
                 <Td><Span>{trumpDtcData.totalSupply}</Span></Td>
                 <Td><Span>{trumpDtcData.totalSold}</Span></Td>
-                <Td><Span>{trumpDtcData.floorPrice}</Span></Td>
+                <Td><Span>{trumpDtcData.floorPrice} AMBER</Span></Td>
                 <Td><Span>0</Span></Td>
             </Tr>
             <Tr>
@@ -123,7 +124,7 @@ const NFTCollectionFetcher = () => {
                 </Td>
                 <Td><Span>{wildPassData.totalSupply}</Span></Td>
                 <Td><Span>{wildPassData.totalSold}</Span></Td>
-                <Td><Span>{wildPassData.floorPrice}</Span></Td>
+                <Td><Span>{wildPassData.floorPrice} AMBER</Span></Td>
                 <Td><Span>0</Span></Td>
             </Tr>
             <Tr>
@@ -137,7 +138,7 @@ const NFTCollectionFetcher = () => {
                 </Td>
                 <Td><Span>{sandboxData.totalSupply}</Span></Td>
                 <Td><Span>{sandboxData.totalSold}</Span></Td>
-                <Td><Span>{sandboxData.floorPrice}</Span></Td>
+                <Td><Span>{sandboxData.floorPrice} AMBER</Span></Td>
                 <Td><Span>0</Span></Td>
             </Tr>
             <Tr>
@@ -151,7 +152,7 @@ const NFTCollectionFetcher = () => {
                 </Td>
                 <Td><Span>{trumpDtcS2Data.totalSupply}</Span></Td>
                 <Td><Span>{trumpDtcS2Data.totalSold}</Span></Td>
-                <Td><Span>{trumpDtcS2Data.floorPrice}</Span></Td>
+                <Td><Span>{trumpDtcS2Data.floorPrice} AMBER</Span></Td>
                 <Td><Span>0</Span></Td>
             </Tr>
             <Tr>
@@ -165,7 +166,7 @@ const NFTCollectionFetcher = () => {
                 </Td>
                 <Td><Span>{awakenedData.totalSupply}</Span></Td>
                 <Td><Span>{awakenedData.totalSold}</Span></Td>
-                <Td><Span>{awakenedData.floorPrice}</Span></Td>
+                <Td><Span>{awakenedData.floorPrice} AMBER</Span></Td>
                 <Td><Span>0</Span></Td>
             </Tr>
         </>

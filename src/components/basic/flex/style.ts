@@ -33,6 +33,7 @@ export interface InlineFlexPropsType {
 	m?:string
 	hoverbackground?: string
 	transition?: string
+	alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
 }
 
 type QueryType = { [key: string]: InlineFlexPropsType };

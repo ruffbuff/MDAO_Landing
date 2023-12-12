@@ -7,67 +7,54 @@ import Image from "components/basic/image";
 import { Span } from "components/basic/text";
 import appConstants from "constant";
 import Footer from "components/footer";
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../../../preSaleContract";
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../../../solContracts";
 import React, { useEffect, useState } from 'react';
-import { useAccount, useContractWrite } from 'wagmi';
 
 const SalePage = () => {
   const [totalSpots, setTotalSpots] = useState(0);
-  const { address } = useAccount();
 
   useEffect(() => {
     getTotalSpots();
-  }, [address]);
+  }, []);
 
   const getTotalSpots = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+
       const presaleId = 4;
       const buyers = await contract.getPresaleBuyers(presaleId);
-      const total = buyers.reduce((sum: number, buyer: { spotsBought: { toNumber: () => number; } }) => sum + buyer.spotsBought.toNumber(), 0);
+
+      const total = buyers.reduce((sum: number, buyer: any) => sum + buyer.spotsBought.toNumber(), 0);
       setTotalSpots(total);
     } catch (error) {
       console.error('Error fetching total spots:', error);
     }
   };
 
-  const { write, data, error } = useContractWrite({
-    address: CONTRACT_ADDRESS,
-    abi: CONTRACT_ABI,
-    functionName: 'buyPlaceInPresale',
-  });
-
   const joinPreSale = async () => {
-    if (!address) {
-      console.error("Wallet not connected");
-      return;
-    }
-  
-    const etherAmount = "25";
-    const presaleId = 4;
-    const weiAmount = ethers.utils.parseEther(etherAmount);
-  
     try {
-      const transaction = await write({
-        args: [presaleId],
-        value: BigInt(weiAmount.toString()),
-      });
-      console.log("Transaction sent:", transaction);
+      if (window.ethereum) {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+        const presaleId = 4;
+        const transaction = await contract.buyPlaceInPresale(presaleId, { value: ethers.utils.parseEther("25") });
+
+        await transaction.wait();
+
+        alert("Successfully joined the pre-sale!");
+      } else {
+        console.error("Ethereum object not found, you need to install MetaMask!");
+      }
     } catch (error) {
-      console.error("Error during transaction:", error);
+      console.error("Error joining pre-sale:", error);
     }
   };
-  
-  useEffect(() => {
-    if (data) {
-      console.log("Transaction successful:", data);
-    }
-    if (error) {
-      console.error("Transaction error:", error);
-    }
-  }, [data, error]);
 
   return (
     <Flex $style={{

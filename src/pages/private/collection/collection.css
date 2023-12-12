@@ -1,0 +1,15 @@
+.nft-default {
+    background: rgba(16,16,16,.2);
+}
+
+.nft-selected {
+    background: rgba(255, 165, 0, .5);
+}
+
+.nft-owned {
+    background: rgba(0, 128, 0, .5);
+}
+
+.nft-owned-selected {
+    background: rgba(0, 100, 0, .5);
+}

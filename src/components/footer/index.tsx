@@ -24,7 +24,7 @@ export default function Footer() {
                 vAlign: "center"
             }}>
             <a href="/" style={{ textDecoration: 'none' }}>
-                <Heading level={2}>MustacheDAO</Heading>
+                <Heading gradient level={2}>MustacheDAO</Heading>
             </a>
                 <Flex $style={{
                     hAlign: "center",

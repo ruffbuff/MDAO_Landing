@@ -8,7 +8,6 @@ import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
 import { actions as appActions } from "store/app.slice";
 import Link from "components/basic/link";
-// import configs from "configs";
 import { useDispatch } from "react-redux";
 
 export default function Header() {
@@ -71,7 +70,6 @@ export default function Header() {
                         <ScrollLink to="roadmap" smooth={true} duration={500}><Span>Roadmap</Span></ScrollLink>
                         <ScrollLink to="team" smooth={true} duration={500}><Span>Team</Span></ScrollLink>
                         <ScrollLink to="faq" smooth={true} duration={500}><Span>FAQ</Span></ScrollLink>
-                        {/*<Link to={configs.appConfigs.path.MARKET_PREFIX}><Span>Market</Span></Link>*/}
                     </Flex>
                 </Flex>
                 <Flex $style={{
@@ -92,9 +90,9 @@ export default function Header() {
                                 </Flex>
                         }
                     </Flex>
-                    <RouterLink to="/sale">
-                        <Button $style={{ border: "1px solid white", kind: "radius" }}>
-                            Sale
+                    <RouterLink to="/market">
+                        <Button disabled $style={{ border: "1px solid white", kind: "radius" }}>
+                            WORKING
                         </Button>
                     </RouterLink>
                 </Flex>

@@ -33,17 +33,16 @@ const TrendingCollection: React.FC<TrendingCollectionProps> = ({ contractAddress
     }, [contractAddress, collectionTitle]);
 
     useEffect(() => {
-        // Process fetched data
-        if (fetchedData) {
+        if (fetchedData && Array.isArray(fetchedData.nfts)) {
             const images = fetchedData.nfts.map((nft: any) => nft.image.originalUrl).slice(0, 3);
             setNftImages(images);
-            const totalSupply = parseInt(fetchedData.nfts[0].contract.totalSupply);
-            setRemainingNfts(Math.max(totalSupply - 3, 0));
-            if (!collectionTitle) {
+            const totalSupply = parseInt(fetchedData.nfts[0]?.contract?.totalSupply, 10);
+            setRemainingNfts(Math.max(totalSupply - images.length, 0));
+            if (!collectionTitle && fetchedData.nfts[0]?.contract?.name) {
                 setCollectionName(fetchedData.nfts[0].contract.name);
             }
         }
-    }, [fetchedData, collectionTitle]); 
+    }, [fetchedData, collectionTitle]);
 
     return (
         <Flex $style={{ gap: "2rem", fDirection: "column", mb: "6rem", maxW: "1440px" }}>

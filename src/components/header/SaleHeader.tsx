@@ -1,8 +1,8 @@
 import Flex from "components/basic/flex";
 import Heading from "components/basic/heading";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "components/basic/icon";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectWallet } from "@thirdweb-dev/react";
 import Link from "components/basic/link";
 import { Span } from "components/basic/text";
 import { useDispatch } from "react-redux";
@@ -13,13 +13,13 @@ const SaleHeader = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setDarkMode();
-  }, [isDark])
+    const setDarkMode = () => {
+        document.body.classList.toggle('dark-theme');
+        dispatch(appActions.toggleMode());
+    };
 
-  const setDarkMode = () => {
-    document.body.classList.toggle('dark-theme');
-    dispatch(appActions.toggleMode());
-  }
+    setDarkMode();
+}, [isDark, dispatch]);
 
   return (
     <Flex $style={{
@@ -51,13 +51,14 @@ const SaleHeader = () => {
                 </Flex>
             }
           </Flex>
-          <ConnectButton
-                            label="Welcome"
-                            accountStatus={{
-                                smallScreen: 'avatar',
-                                largeScreen: 'full',
-                            }}
-                        />
+          <ConnectWallet
+            theme={"dark"}
+            btnTitle={"Welcome"}
+            modalTitle={"Choose your wallet"}
+            switchToActiveChain={true}
+            modalSize={"compact"}
+            welcomeScreen={{ title: "Welcome" }}
+          />
         </Flex>
       </Flex>
     </Flex>

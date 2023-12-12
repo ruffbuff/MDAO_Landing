@@ -4,13 +4,14 @@ import { EvmChain } from '@moralisweb3/common-evm-utils';
 import Flex from "components/basic/flex";
 import { Span } from "components/basic/text";
 
+Moralis.start({ apiKey: process.env.REACT_APP_MORALIS_API_KEY });
+
 export default function MarketFooter() {
     const [amberData, setAmberData] = useState({ price: 'Loading...', exchange: 'Loading...' });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await Moralis.start({ apiKey: process.env.REACT_APP_MORALIS_API_KEY });
                 const address = "0x8865bc57c58be23137ace9ed1ae1a05fe5c8b209";
                 const chain = EvmChain.POLYGON;
         

@@ -1,5 +1,5 @@
 import configs from "configs";
-import CollectionPage from "pages/private/collection";
+import KabanaClubPage from "pages/private/collection";
 import DetailPage from "pages/private/detail";
 import MpLandingPage from "pages/private/landing";
 import ProfilePage from "pages/private/profile";
@@ -15,10 +15,10 @@ const privateRoutes = [
     },
     {
         path: configs.appConfigs.path.COLLECTION_PREFIX,
-        element: <CollectionPage />
+        element: <KabanaClubPage />
     },
     {
-        path: configs.appConfigs.path.DETAIL_PREFIX,
+        path: `${configs.appConfigs.path.MARKET_PREFIX}:contractAddress/:tokenId`,
         element: <DetailPage />
     }
 ]

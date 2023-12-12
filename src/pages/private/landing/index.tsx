@@ -5,13 +5,16 @@ import { Span } from "components/basic/text"
 import Table from "components/basic/table"
 import { Tr, Th } from "components/basic/table"
 import Image from "components/basic/image"
+import Link from "components/basic/link";
 import appConstants from "constant"
 import Button from "components/basic/button"
 import Grid from "components/basic/grid"
 import { Input } from "components/basic/input"
 import Icon from "components/basic/icon"
+import configs from "configs";
 import NFTCollectionFetcher from './NFTCollectionFetcher';
 import TrendingCollection from './TrendingCollection';
+import { CONTRACT_AWAKENED, CONTRACT_TRUMPDTC, CONTRACT_WILDPASS, CONTRACT_SANDBOX, CONTRACT_TRUMPDTCS2 } from "../../../solContracts";
 
 export default function MpLandingPage() {
     return (
@@ -146,25 +149,27 @@ export default function MpLandingPage() {
                         maxW: "1440px"
                     }}>
                         <TrendingCollection 
-                            contractAddress={process.env.REACT_APP_CONTRACT_TRUMPDTC || 'defaultAddress'} 
+                            contractAddress={CONTRACT_TRUMPDTC || 'defaultAddress'} 
                             collectionTitle="Trump DTC Collection"
                         />
                         <TrendingCollection 
-                            contractAddress={process.env.REACT_APP_CONTRACT_WILDPASS || 'defaultAddress'} 
+                            contractAddress={CONTRACT_WILDPASS || 'defaultAddress'} 
                             collectionTitle="WildPass"
                         />
                         <TrendingCollection 
-                            contractAddress={process.env.REACT_APP_CONTRACT_SANDBOX || 'defaultAddress'} 
+                            contractAddress={CONTRACT_SANDBOX || 'defaultAddress'} 
                             collectionTitle="Sandbox"
                         />
                         <TrendingCollection 
-                            contractAddress={process.env.REACT_APP_CONTRACT_TRUMPDTCS2 || 'defaultAddress'} 
+                            contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'} 
                             collectionTitle="Trump DTC Collection S2"
                         />
-                        <TrendingCollection 
-                            contractAddress={process.env.REACT_APP_CONTRACT_AWAKENED || 'defaultAddress'}
-                            collectionTitle="Awakened Mushrooms"
-                        />
+                        <Link to={configs.appConfigs.path.COLLECTION_PREFIX}>
+                            <TrendingCollection 
+                                contractAddress={CONTRACT_AWAKENED || 'defaultAddress'} 
+                                collectionTitle="Awakened Mushrooms"
+                            />
+                        </Link>
                     </Flex>
                 </Grid>
             </Flex>
