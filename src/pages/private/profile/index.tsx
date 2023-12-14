@@ -1,3 +1,4 @@
+// src/pages/private/profile/index.tsx
 import Button from "components/basic/button";
 import Flex from "components/basic/flex";
 import Grid from "components/basic/grid";
@@ -7,9 +8,8 @@ import Image from "components/basic/image";
 import { Span } from "components/basic/text";
 import appConstants from "constant";
 import { TabContent, TabHeader, TabList } from "components/basic/tab";
-
 import React, { useState, useEffect, useMemo } from "react";
-import { useAddress,  } from "@thirdweb-dev/react";
+import { useAddress } from "@thirdweb-dev/react";
 import { ethers } from 'ethers';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -19,11 +19,9 @@ import {
     CONTRACT_ADDRESS_2,
     CONTRACT_ABI_AWAKENED
 } from "../../../solContracts";
+import ContributionOverview from './components/Contribution';
+//import EventTab from "./components/EventTab";
 
-interface ContributionTitleProps {
-    date: string,
-    count: number
-}
 interface NFTImage {
   url?: string;
 }
@@ -42,212 +40,6 @@ interface NFT {
   image: NFTImage;
   contract: NFTContract;
 }
-
-interface ContributionOverviewProps {
-    year: number
-}
-
-const ContributionTile = ({ date, count }: ContributionTitleProps) => {
-    return (
-        <Flex className="contribution-tile" $style={{
-            minH: "12px",
-            minW: "12px",
-            radius: "3px",
-            background: count > 5 ? '#1DAEFF' : 'rgba(29,174,255, .1)',
-            m: "5px",
-            display: "flex",
-            fDirection: "column",
-            hAlign: "center",
-            vAlign: "center"
-        }}>
-        </Flex>
-    );
-};
-
-const ContributionOverview = ({ year }: ContributionOverviewProps) => {
-
-    const startDate = new Date(year, 0, 1);
-    const endDate = new Date(year, 11, 31);
-
-    const contributions = [];
-
-    // Generate contributions data for each day within the year
-    let currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
-        const dateString = currentDate.toISOString().split('T')[0];
-        const count = Math.floor(Math.random() * 10); // Example: Random count for demonstration
-
-        contributions.push({
-            id: dateString,
-            date: dateString,
-            count: count
-        });
-
-        currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return (
-        <Flex $style={{
-            fDirection: "column",
-            vAlign: "center",
-            mb: "10rem",
-            position: "relative",
-            zIndex: "1"
-        }}>
-            <Flex $style={{
-                w: "100%",
-                maxW: "1440px",
-                fDirection: "column",
-                gap: "2rem"
-            }}>
-                <h2>Contribution Overview</h2>
-                <Flex $style={{
-                    vAlign: "flex-start",
-                    gap: "3rem"
-                }}>
-                    <Flex $style={{
-                        fDirection: "column",
-                        gap: "1rem"
-                    }}>
-                        <Span $style={{
-                            wrap: "nowrap"
-                        }}>95 edits in the last year</Span>
-                        <Flex $style={{
-                            fDirection: "column",
-                            gap: ".5rem"
-                        }}>
-                            <Flex $style={{
-                                vAlign: "center",
-                                gap: "1rem"
-                            }}>
-                                <Flex className="contribution-tile" $style={{
-                                    minH: "12px",
-                                    minW: "12px",
-                                    radius: "3px",
-                                    background: 'rgba(29,174,255, .1)',
-                                    display: "flex",
-                                    fDirection: "column",
-                                    hAlign: "center",
-                                    vAlign: "center"
-                                }}>
-                                </Flex>
-                                <Span>136 low days</Span>
-                            </Flex>
-                            <Flex $style={{
-                                vAlign: "center",
-                                gap: "1rem"
-                            }}>
-                                <Flex className="contribution-tile" $style={{
-                                    minH: "12px",
-                                    minW: "12px",
-                                    radius: "3px",
-                                    background: 'rgba(29,174,255, .65)',
-                                    display: "flex",
-                                    fDirection: "column",
-                                    hAlign: "center",
-                                    vAlign: "center"
-                                }}>
-                                </Flex>
-                                <Span>69 Normal days</Span>
-                            </Flex>
-                            <Flex $style={{
-                                vAlign: "center",
-                                gap: "1rem"
-                            }}>
-                                <Flex className="contribution-tile" $style={{
-                                    minH: "12px",
-                                    minW: "12px",
-                                    radius: "3px",
-                                    background: 'rgba(29,174,255, 1)',
-                                    display: "flex",
-                                    fDirection: "column",
-                                    hAlign: "center",
-                                    vAlign: "center"
-                                }}>
-                                </Flex>
-                                <Span>20 hard days</Span>
-                            </Flex>
-                        </Flex>
-                    </Flex>
-
-                    <Flex $style={{
-                        fDirection: "column",
-                    }}>
-                        <Flex $style={{
-                            p: "0 0 0 2rem",
-                            gap: "72px"
-                        }}>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Dec</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Jan</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Feb</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Mar</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Apr</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>May</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>June</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>July</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Aug</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Sep</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Oct</Span>
-                            <Span $style={{
-                                size: "12px"
-                            }}>Nov</Span>
-                        </Flex>
-                        <Flex>
-                            <Flex $style={{
-                                fDirection: "column",
-                                gap: "26px",
-                                m: "3px"
-                            }}>
-                                <Span $style={{
-                                    size: "12px",
-                                }}>Mon</Span>
-                                <Span $style={{
-                                    size: "12px",
-                                }}>Wed</Span>
-                                <Span $style={{
-                                    size: "12px",
-                                }}>Fri</Span>
-                            </Flex>
-                            <Flex $style={{
-                                fWrap: "wrap",
-                            }}>
-                                {contributions.map((contribution) => (
-                                    <ContributionTile
-                                        key={contribution.id}
-                                        date={contribution.date}
-                                        count={contribution.count}
-                                    />
-                                ))}
-                            </Flex>
-                        </Flex>
-                    </Flex>
-                </Flex>
-            </Flex>
-        </Flex>
-    );
-};
 
 /* =====================================================PROFILEPAGE===================================================== */
 
@@ -490,7 +282,7 @@ export default function ProfilePage() {
             </Flex>
             <Flex $style={{
                 fDirection: "column",
-                p: "3rem 0 0 0",
+                p: "2.5rem 0 0 0",
                 vAlign: "center",
                 w: "100%"
             }}>
@@ -518,11 +310,12 @@ export default function ProfilePage() {
                             gap: "1rem"
                         }}>
                         <Flex $style={{
-                            gap: "1rem"
+                            gap: "0.5rem"
                         }}>
+                            <Icon icon="github" />
+                            <Icon icon="x-twitter" />
                             <Icon icon="discord" />
-                            <Icon icon="youtube" />
-                            <Icon icon="twitter" />
+                            <Icon icon="linkedin" />
                         </Flex>
                             <Heading gradient level={3}>{address ? shortenAddress(address) : 'Err'}</Heading>
                             <Flex $style={{
@@ -621,6 +414,9 @@ export default function ProfilePage() {
                     </TabHeader>
                 </Flex>
             </TabList>
+            <TabContent isActive={2 === activeTab}>
+                <ContributionOverview initialYear={new Date().getFullYear()} />
+            </TabContent>
             <TabContent isActive={0 === activeTab}>
             <Grid $style={{
                 columns: "5",
@@ -675,9 +471,6 @@ export default function ProfilePage() {
                 </Flex>
                 ))}
             </Grid>
-            </TabContent>
-            <TabContent isActive={2 === activeTab}>
-                <ContributionOverview year={2023} />
             </TabContent>
             <Modal
                 open={open}

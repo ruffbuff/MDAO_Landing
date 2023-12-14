@@ -2,11 +2,12 @@ import Flex from "components/basic/flex";
 import Heading from "components/basic/heading";
 import React, { useEffect, useState } from "react";
 import Icon from "components/basic/icon";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, darkTheme } from "@thirdweb-dev/react";
 import Link from "components/basic/link";
 import { Span } from "components/basic/text";
 import { useDispatch } from "react-redux";
 import { actions as appActions } from "store/app.slice";
+import { Polygon } from "@thirdweb-dev/chains";
 
 const SaleHeader = () => {
   const [isDark, setIsDark] = useState(false);
@@ -51,14 +52,25 @@ const SaleHeader = () => {
                 </Flex>
             }
           </Flex>
-          <ConnectWallet
-            theme={"dark"}
-            btnTitle={"Welcome"}
-            modalTitle={"Choose your wallet"}
-            switchToActiveChain={true}
-            modalSize={"compact"}
-            welcomeScreen={{ title: "Welcome" }}
-          />
+                        <ConnectWallet
+                            theme={darkTheme({
+                                fontFamily: "Inter, sans-serif",
+                                colors: {
+                                  modalBg: "#300146",
+                                  accentText: "purple",
+                                  walletSelectorButtonHoverBg: "#42125a",
+                                  separatorLine: "#ffffff"
+                                },
+                            })}
+                            displayBalanceToken={{
+                              [Polygon.chainId]: "0x8865bc57c58be23137ace9ed1ae1a05fe5c8b209"
+                            }}                          
+                            btnTitle={"Connect"}
+                            modalTitle={"Choose your wallet"}
+                            switchToActiveChain={true}
+                            modalSize={"compact"}
+                            welcomeScreen={{ title: "Welcome" }}
+                        />
         </Flex>
       </Flex>
     </Flex>

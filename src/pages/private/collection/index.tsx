@@ -10,10 +10,13 @@ import { P, Span } from "components/basic/text";
 import appConstants from "constant";
 import {
     CONTRACT_ADDRESS_2,
-    CONTRACT_ABI_2
+    CONTRACT_ABI_2,
+    CONTRACT_AWAKENED
 } from "../../../solContracts";
 import { ethers } from 'ethers';
 import { useAddress } from "@thirdweb-dev/react";
+import { useNavigate } from 'react-router-dom';
+import { useNft } from 'NftContext';
 interface NFT {
     id: string;
     seller: string;
@@ -27,13 +30,59 @@ interface NFT {
 }
 export default function KabanaClubPage() {
     const connectedAddress = useAddress();
+    const navigate = useNavigate();
+    const { setSelectedNft } = useNft();
     const [nftsList, setNftsList] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [selectedNfts, setSelectedNfts] = useState<NFT[]>([]);
+    const [collectionStats, setCollectionStats] = useState({
+        totalListed: 0,
+        totalSold: 0,
+        floorPrice: 0
+    });
+    const [searchQuery, setSearchQuery] = useState('');
+    const [totalOwners, setTotalOwners] = useState(0);
+    const [uniqueOwnersPercentage, setUniqueOwnersPercentage] = useState('0%');
+        
+    const goToNftDetail = (nft: NFT) => {
+        setSelectedNft(nft);
+        navigate(`/market/${nft.contractAddress}/${nft.tokenId}`);
+    };
+
+    const handleSearchChange = (event: any) => {
+        setSearchQuery(event.target.value.toLowerCase());
+    };
+
+    const filteredNftsList = nftsList.filter(nft => 
+        nft.title.toLowerCase().includes(searchQuery) ||
+        nft.id.toString().includes(searchQuery)
+    );
 
     const isNftSelected = (nft: NFT) => selectedNfts.some(selectedNft => selectedNft.id === nft.id);
     
     const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
+    
+    const fetchCollectionData = async () => {
+        try {
+            const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
+            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider);
+    
+            const collectionAddress = CONTRACT_AWAKENED;
+            const data = await contract.collectionsData(collectionAddress);
+            
+            setCollectionStats({
+                totalListed: data.totalListed.toNumber(),
+                totalSold: data.totalSold.toNumber(),
+                floorPrice: parseFloat(ethers.utils.formatEther(data.floorPrice))
+            });            
+        } catch (error) {
+            console.error('Error fetching collection data:', error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchCollectionData();
+    }, []);
 
     const selectNft = (nftToSelect: NFT) => {
         setSelectedNfts(prevSelectedNfts => {
@@ -88,6 +137,28 @@ export default function KabanaClubPage() {
         fetchNFTs();
     }, []);
 
+    useEffect(() => {
+        const fetchOwnersData = async () => {
+            const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${process.env.REACT_APP_ALCHEMY_API_KEY}/getOwnersForContract?contractAddress=${CONTRACT_AWAKENED}&withTokenBalances=true`;
+            try {
+                const response = await fetch(url, { headers: { accept: 'application/json' } });
+                const data = await response.json();
+                const owners = data.owners;
+    
+                const totalTokens = owners.reduce((acc: number, owner: { tokenBalances: { balance: string }[] }) => acc + owner.tokenBalances.length, 0);
+    
+                const uniqueOwners = owners.length;
+    
+                setTotalOwners(uniqueOwners);
+                setUniqueOwnersPercentage(((uniqueOwners / totalTokens) * 100).toFixed(2) + '%');
+            } catch (error) {
+                console.error('Error fetching owners data:', error);
+            }
+        };
+    
+        fetchOwnersData();
+    }, []);
+
     const handleBuy = async (selectedNft: NFT) => {
         if (!selectedNft) return;
 
@@ -122,7 +193,7 @@ export default function KabanaClubPage() {
             zIndex: "1"
         }}>
             <Flex $style={{
-                background: `url(${appConstants.Imgs.BG2})`,
+                background: `url(https://i.seadn.io/gcs/files/5643ea2b3e6e6341df027bdebb027ab2.png?auto=format&dpr=1&w=3840)`,
                 h: "32rem",
                 mb: "2rem",
                 w: "100%"
@@ -230,42 +301,42 @@ export default function KabanaClubPage() {
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
-                        <Heading level={4}>0.00 AMBER</Heading>
-                        <Span>Total Volume</Span>
-                    </Flex>
-                    <Flex $style={{
-                        fDirection: "column",
-                        gap: ".5rem"
-                    }}>
-                        <Heading level={4}>0.00 AMBER</Heading>
+                        <Heading level={4}>{collectionStats.floorPrice} AMBER</Heading>
                         <Span>Floor price</Span>
                     </Flex>
                     <Flex $style={{
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
-                        <Heading level={4}>0.00 AMBER</Heading>
-                        <Span>Best Offer</Span>
+                        <Heading level={4}>0.00</Heading>
+                        <Span>Volume</Span>
                     </Flex>
                     <Flex $style={{
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
-                        <Heading level={4}>0%</Heading>
+                        <Heading level={4}>{collectionStats.totalSold}</Heading>
+                        <Span>Total Sold</Span>
+                    </Flex>
+                    <Flex $style={{
+                        fDirection: "column",
+                        gap: ".5rem"
+                    }}>
+                        <Heading level={4}>{collectionStats.totalListed}</Heading>
                         <Span>Listed</Span>
                     </Flex>
                     <Flex $style={{
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
-                        <Heading level={4}>0</Heading>
+                        <Heading level={4}>{totalOwners}</Heading>
                         <Span>Owners</Span>
                     </Flex>
                     <Flex $style={{
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
-                        <Heading level={4}>0%</Heading>
+                        <Heading level={4}>{uniqueOwnersPercentage}</Heading>
                         <Span>Unique Owners</Span>
                     </Flex>
                 </Flex>
@@ -286,14 +357,13 @@ export default function KabanaClubPage() {
                 }}>
                     <Span $style={{
                         wrap: "nowrap"
-                    }}>Total NFTs: {nftsList.length}</Span>
+                    }}>Total Listed: {nftsList.length}</Span>
                 </Flex>
-                <Input $style={{
-                    border: "1px solid #3B3B3B"
-                }} placeholder="Search by Name" />
-                <Input $style={{
-                    border: "1px solid #3B3B3B"
-                }} placeholder="Price to Low" />
+                <Input 
+                    $style={{ border: "1px solid #3B3B3B" }}
+                    placeholder="Search by Name or ID"
+                    onChange={handleSearchChange}
+                />
                 <Flex $style={{
                     gap: "1rem",
                     queries: {
@@ -342,25 +412,37 @@ export default function KabanaClubPage() {
                     480: { columns: "1" }
                 }
             }}>
-                {nftsList.map((nft, index) => {
+                {filteredNftsList.map((nft, index) => {
                     const isOwnedByUser = nft.seller.toLowerCase() === connectedAddress?.toLowerCase();
+                    const isSelected = isNftSelected(nft);
+
+                    const nftStyle = {
+                        cursor: 'pointer',
+                        width: '100%',
+                        border: isSelected ? "1px solid white" : "none",
+                        borderRadius: "2rem",
+                        background: isOwnedByUser ? "rgba(0, 128, 0, .5)" : (isSelected ? "rgba(16,16,16,.5)" : "rgba(16,16,16,.2)"), // Подсветка в зависимости от статуса
+                    };
 
                     return (
-                        <div key={index} onClick={() => selectNft(nft)} style={{ cursor: 'pointer', width: '100%' }}>
+                        <div key={index} onClick={() => selectNft(nft)} style={nftStyle}>
                             <Flex $style={{
                                 fDirection: "column",
                                 background: isOwnedByUser ? "rgba(0, 128, 0, .5)" : (isNftSelected(nft) ? "rgba(16,16,16,.5)" : "rgba(16,16,16,.2)"),
                                 radius: "2rem",
                                 w: "100%"
                             }}>
-                                <div style={{
-                                    backgroundImage: `url(${nft.media[0]?.gateway || 'default_image_url'})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    borderRadius: "2rem 2rem 0 0",
-                                    overflow: "hidden",
-                                    height: "15rem"
-                                }}></div>
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${nft.media[0]?.gateway || 'default_image_url'})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        borderRadius: "2rem 2rem 0 0",
+                                        overflow: "hidden",
+                                        height: "15rem"
+                                    }}
+                                >
+                                </div>
                                 <Flex $style={{
                                     p: "2rem",
                                     fDirection: "column",
@@ -368,7 +450,20 @@ export default function KabanaClubPage() {
                                 }}>
                                     <Flex $style={{ fDirection: "column" }}>
                                         <Heading level={5}>{nft.title || 'NFT Name'}</Heading>
-                                        <Span>{nft.contractMetadata?.name || 'Collection Name'}</Span>
+                                        <Flex $style={{
+                                            alignItems: "center",
+                                            gap: "0.5rem"
+                                        }}>
+                                            <Image 
+                                                src="https://i.seadn.io/gae/Cb_v8uUJT_VBQPJzkYb1K6r88zCkWDQcFoPHYqc-HfsPFNpRCLxqLk64Pr6n00AdPNrNjVzg54n04V8MyQ45a4XUtE_6lQwXYLF6cA?auto=format&dpr=1&w=128" 
+                                                style={{ 
+                                                    width: "30px",
+                                                    height: "30px",
+                                                    borderRadius: "15px"
+                                                }} 
+                                            />
+                                            <Span>{nft.contractMetadata?.name || 'Collection Name'}</Span>
+                                        </Flex>
                                     </Flex>
                                     <Flex $style={{ hAlign: "space-between" }}>
                                         <Flex $style={{ fDirection: "column" }}>
@@ -376,6 +471,15 @@ export default function KabanaClubPage() {
                                             <Span>{nft.price || '0.00'} {nft.paymentType}</Span>
                                         </Flex>
                                     </Flex>
+                                    <Button 
+                                        onClick={() => goToNftDetail(nft)}
+                                        $style={{
+                                            bg: "#A259FF",
+                                            kind: "radius",
+                                        }}
+                                    >
+                                        View Details
+                                    </Button>
                                 </Flex>
                             </Flex>
                         </div>

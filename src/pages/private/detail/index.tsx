@@ -3,10 +3,14 @@ import Grid from "components/basic/grid";
 import Heading from "components/basic/heading";
 import Icon from "components/basic/icon";
 import Image from "components/basic/image";
+import Button from "components/basic/button";
 import { P, Span } from "components/basic/text";
 import appConstants from "constant";
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useNft } from "NftContext";
+import { ethers } from 'ethers';
+import { CONTRACT_ADDRESS_2, CONTRACT_ABI_2 } from "../../../solContracts";
 interface NftData {
     media?: { gateway: string }[];
     description?: string;
@@ -23,7 +27,30 @@ interface NftData {
 }
 export default function DetailPage() {
     const { contractAddress, tokenId } = useParams();
+    const { selectedNft } = useNft();
     const [nftData, setNftData] = useState<NftData | null>(null);
+
+    const handleBuy = async () => {
+        if (!selectedNft) return;
+
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, signer);
+
+            let transaction;
+            if (selectedNft.paymentType === 'MATIC') {
+                transaction = await contract.buyWithMATIC(selectedNft.listingId, { value: ethers.utils.parseEther(selectedNft.price) });
+            } else if (selectedNft.paymentType === 'AMBER') {
+                transaction = await contract.buyWithAMBER(selectedNft.listingId, ethers.utils.parseEther(selectedNft.price));
+            }
+
+            await transaction.wait();
+            console.log('Transaction successful');
+        } catch (error) {
+            console.error('Transaction failed:', error);
+        }
+    };
 
     useEffect(() => {
         const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
@@ -153,8 +180,8 @@ export default function DetailPage() {
                         border: ".5px solid #2D2E36",
                         mb: "1rem"
                     }}>
-                        <Heading level={5}> Buy Offers</Heading>
-
+                        <Heading level={5}>Price</Heading>
+                        <Span>{selectedNft ? `${selectedNft.price} ${selectedNft.paymentType}` : 'Loading...'}</Span>
                     </Flex>
                     <Flex $style={{
                         gap: "1rem",
@@ -166,8 +193,21 @@ export default function DetailPage() {
                         mb: "1rem"
                     }}>
                         <Heading level={5}>Activity</Heading>
-
                     </Flex>
+                    <Button
+                        onClick={handleBuy}
+                        $style={{
+                            bg: "#A259FF",
+                            kind: "radius"
+                        }}
+                    >
+                        <Flex $style={{
+                            gap: ".5rem"
+                        }}>
+                            <Icon icon={'buy'} />
+                            <Span>Buy</Span>
+                        </Flex>
+                    </Button>
                 </Flex>
             </Flex>
         </Flex>

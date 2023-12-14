@@ -8,6 +8,7 @@ import configs from "configs";
 import { useDispatch } from "react-redux";
 import { actions as appActions } from "store/app.slice";
 import { ConnectWallet, darkTheme } from "@thirdweb-dev/react";
+import { Polygon } from "@thirdweb-dev/chains";
 import './MarketHeader.css';
 
 function MarketHeader() {
@@ -45,7 +46,8 @@ function MarketHeader() {
                         }
                     }
                 }}>
-                    <Link to="/"><Heading level={3}>MustacheDAO</Heading></Link>
+                    <Icon icon={'marketlog'} />
+                    <Link to="/"><Heading level={4}>MustacheDAO</Heading></Link>
                 </Flex>
                 <Flex $style={{
                     display: "none",
@@ -55,6 +57,7 @@ function MarketHeader() {
                         }
                     }
                 }}>
+                    <Icon icon={'marketlog'} />
                     <Link to="/"><Heading level={3}>MustacheDAO</Heading></Link>
                 </Flex>
                 <Flex $style={{
@@ -103,6 +106,9 @@ function MarketHeader() {
                                   separatorLine: "#ffffff"
                                 },
                             })}
+                            displayBalanceToken={{
+                              [Polygon.chainId]: "0x8865bc57c58be23137ace9ed1ae1a05fe5c8b209"
+                            }} 
                             btnTitle={"Connect"}
                             modalTitle={"Choose your wallet"}
                             switchToActiveChain={true}
