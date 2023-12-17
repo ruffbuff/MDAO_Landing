@@ -8,7 +8,7 @@ import Image from "components/basic/image";
 import { Span } from "components/basic/text";
 import appConstants from "constant";
 import { TabContent, TabHeader, TabList } from "components/basic/tab";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { ChangeEvent, useState, useEffect, useMemo } from "react";
 import { useAddress } from "@thirdweb-dev/react";
 import { ethers } from 'ethers';
 import Modal from '@mui/material/Modal';
@@ -17,10 +17,12 @@ import TextField from '@mui/material/TextField';
 import {
     CONTRACT_ABI_2,
     CONTRACT_ADDRESS_2,
-    CONTRACT_ABI_AWAKENED
+    CONTRACT_ABI_AWAKENED,
+    CONTRACT_SMARTDB, CONTRACT_SMARTDB_ABI
 } from "../../../solContracts";
 import ContributionOverview from './components/Contribution';
-//import EventTab from "./components/EventTab";
+import { debounce } from 'lodash';
+import styled from 'styled-components';
 
 interface NFTImage {
   url?: string;
@@ -41,10 +43,21 @@ interface NFT {
   contract: NFTContract;
 }
 
+const AvatarContainer = styled.div`
+    border-radius: 50%;
+    overflow: hidden;
+    marginTop: 2rem;
+    width: 100px;
+    height: 100px;
+    position: absolute;    
+`;
+
 /* =====================================================PROFILEPAGE===================================================== */
 
 export default function ProfilePage() {
     const address = useAddress();
+    const [contract, setContract] = useState<ethers.Contract | null>(null);
+
     const [activeTab, setActiveTab] = useState(0);
     const [nfts, setNfts] = useState<NFT[]>([]);
     const [isListing, setIsListing] = useState(false);
@@ -55,6 +68,197 @@ export default function ProfilePage() {
     const [tokenId, setTokenId] = useState('');
     const [price, setPrice] = useState('');
     const [listingType, setListingType] = useState<'AMBER' | 'MATIC'>('AMBER');
+
+    const [avatarUrl, setAvatarUrl] = useState(appConstants.Imgs.Avatar6);
+    const [bannerUrl, setBannerUrl] = useState(appConstants.Imgs.Banner);
+    const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
+    const [selectedBannerFile, setSelectedBannerFile] = useState<File | null>(null);
+
+    const [bio, setBio] = useState('Your bio here');
+    const [inputBio, setInputBio] = useState('');
+
+    const [links, setLinks] = useState<string[]>(['']);
+
+    const [isBioModalOpen, setBioModalOpen] = useState(false);
+    const [isDataChanged, setIsDataChanged] = useState(false);
+
+    useEffect(() => {
+        if (window.ethereum && address) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const contractInstance = new ethers.Contract(CONTRACT_SMARTDB, CONTRACT_SMARTDB_ABI, signer);
+            setContract(contractInstance);
+        }
+    }, [address]);
+    
+    const prepareLinksForTransaction = (linksString: string): string[] => {
+        return linksString.split(',').map((link: string) => link.trim());
+    };         
+    
+    const handleBioChange = (event: any) => {
+        setInputBio(event.target.value);
+        setIsDataChanged(true);
+    };
+
+    const handleLinksChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLinks([event.target.value]);
+        setIsDataChanged(true);
+    };
+
+    const openBioModal = () => {
+        setBioModalOpen(true);
+    };
+
+    const closeBioModal = () => {
+        setBioModalOpen(false);
+    };
+
+    const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setSelectedAvatarFile(event.target.files[0]);
+        }
+    };
+
+    const handleBannerChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setSelectedBannerFile(event.target.files[0]);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!address || !contract) {
+            console.error('Address or contract not available');
+            return;
+        }
+    
+        // Fetch user ID
+        let fetchedUserId;
+        try {
+            fetchedUserId = await contract.getUserIdByWallet(address);
+            console.log('User ID fetched:', fetchedUserId);
+        } catch (error) {
+            console.error('Error fetching user ID:', error);
+            return;
+        }
+    
+        const formData = new FormData();
+        let avatarLink = '0'; // Default value
+        let bannerLink = '0'; // Default value
+        let bioData = '0';    // Default value
+        let linksData = ['0']; // Default value as an array with a single '0' element
+
+        if (!isDataChanged) {
+            console.log('No data changed, skipping update');
+            return;
+        }
+
+        if (selectedAvatarFile) {
+            formData.append('avatar', selectedAvatarFile);
+        }
+        if (selectedBannerFile) {
+            formData.append('banner', selectedBannerFile);
+        }
+        if (inputBio.trim() !== '') {
+            bioData = inputBio;
+        }
+        formData.append('bio', bioData);
+    
+        try {
+            const response = await fetch('http://localhost:3001/api/data', {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to upload profile data');
+            }
+    
+            const data = await response.json();
+            console.log('Profile data:', data);
+    
+            // Use the received data if available
+            avatarLink = data.avatarLink || avatarLink;
+            bannerLink = data.bannerLink || bannerLink;
+            bioData = data.bio || bioData;
+            linksData = links.length > 0 && links[0] !== '' ? links : linksData;
+    
+            // Update frontend state with the new data
+            setAvatarUrl(avatarLink);
+            setBannerUrl(bannerLink);
+            setBio(bioData);
+    
+            // Convert BigNumber to a string or number as required
+            const userIdNumber = fetchedUserId.toString();
+            const linksString = links.join(',');
+            const linksArray = prepareLinksForTransaction(linksString);
+        
+            // Call the smart contract function
+            try {
+                await contract.updateProfile(userIdNumber, avatarLink, bannerLink, bioData, linksArray);
+                console.log('Profile updated in smart contract');
+                setIsDataChanged(false);
+            } catch (error) {
+                console.error('Error updating profile in smart contract:', error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };    
+
+    const fetchNFTsDebounced = debounce((address) => {
+        if (!address) return;
+
+        const options = { method: 'GET', headers: { accept: 'application/json' } };
+        const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
+        const timestamp = new Date().getTime();
+        const alchemyURL = `https://polygon-mainnet.g.alchemy.com/nft/v3/${apiKey}/getNFTsForOwner?owner=${address}&withMetadata=true&pageSize=100&timestamp=${timestamp}`;
+
+        fetch(alchemyURL, options)
+            .then(response => response.json())
+            .then(data => {
+                // ... process data
+            })
+            .catch(err => console.error('Error fetching NFTs:', err));
+    }, 1000); // Debounce for 1 second
+
+    useEffect(() => {
+        fetchNFTsDebounced(address);
+    }, [address]);
+    
+    useEffect(() => {
+        const fetchProfile = async () => {
+            if (!address || !contract) {
+                console.error('Address or contract instance not available for fetching profile');
+                return;
+            }
+
+            try {
+                const fetchedUserId = await contract.getUserIdByWallet(address);
+                const profileData = await contract.getProfile(fetchedUserId);
+                setAvatarUrl(profileData.avatarPic);
+                setBannerUrl(profileData.bannerPic);
+                setBio(profileData.bioData);
+                setLinks(profileData.links);
+                console.log('Profile data fetched:', profileData);
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+            }
+        };
+
+        fetchProfile();
+    }, [address, contract]);         
+    
+    const changeActiveTab = (index: number) => {
+        setActiveTab(() => index);
+    }
+
+    const getSocialIconName = (url: any) => {
+        if (url.includes('github.com')) return 'github';
+        if (url.includes('twitter.com')) return 'x-twitter';
+        if (url.includes('discord.com')) return 'discord';
+        if (url.includes('linkedin.com')) return 'linkedin';
+        return null;
+    };
 
     const shortenAddress = (address: any, chars = 4) => {
         return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`;
@@ -68,19 +272,19 @@ export default function ProfilePage() {
         "0xE28D2D8746D855251BA677a91626009CB33aA4F9"
     ], []);
 
-    const changeActiveTab = (index: number) => {
-        setActiveTab(() => index);
-    }
-
     const style = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: '400px',
         bgcolor: 'background.paper',
-        boxShadow: 24,
+        boxShadow: '2px 2px 2px gray',
         p: 4,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
     };
 
     const selectNft = (nft: NFT) => {
@@ -249,9 +453,11 @@ export default function ProfilePage() {
             position: "relative",
             zIndex: "1"
         }}>
-
             <Flex $style={{
-                background: `url(${appConstants.Imgs.Banner})`,
+                background: `url(${bannerUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
                 minH: "15rem",
                 w: "100%",
             }}>
@@ -275,7 +481,9 @@ export default function ProfilePage() {
                                 }
                             }
                         }}>
-                            <Image src={appConstants.Imgs.Avatar6} $style={{ maxW: "100px" }} />
+                            <AvatarContainer>
+                                <Image src={avatarUrl} />
+                            </AvatarContainer>
                         </Flex>
                     </Flex>
                 </Flex>
@@ -312,28 +520,76 @@ export default function ProfilePage() {
                         <Flex $style={{
                             gap: "0.5rem"
                         }}>
-                            <Icon icon="github" />
-                            <Icon icon="x-twitter" />
-                            <Icon icon="discord" />
-                            <Icon icon="linkedin" />
+                            {links.map((link, index) => {
+                            const iconName = getSocialIconName(link);
+                            if (!iconName) return null;
+                            return (
+                                <a
+                                key={index}
+                                href={link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none' }} // To ensure styling doesn't interfere with functionality
+                                >
+                                <Icon icon={iconName} style={{ cursor: 'pointer' }} />
+                                </a>
+                            );
+                            })}
                         </Flex>
                             <Heading gradient level={3}>{address ? shortenAddress(address) : 'Err'}</Heading>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
-                                <Heading level={5}>Bio</Heading>
-                                <Span>Database Bio here.</Span>
+                            <Heading level={5}>About me</Heading>
+                            <Span>{bio}</Span>
                             </Flex>
                         </Flex>
+                        <Modal
+                            open={isBioModalOpen}
+                            onClose={closeBioModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: '20vh',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                width: 400,
+                                bgcolor: 'background.paper',
+                                boxShadow: 24,
+                                p: 4,
+                                borderRadius: '1rem',
+                            }}
+                        >
+                            <Span $style={{ mb: "1rem", color: "#A259FF" }}>
+                                <Heading level={4}>About me</Heading>
+                            </Span>
+                            <input type="file" onChange={handleAvatarChange} accept="image/*" />
+                            <input type="file" onChange={handleBannerChange} accept="image/*" />
+                            <TextField
+                                value={inputBio}
+                                onChange={handleBioChange}
+                                fullWidth
+                                variant="outlined"
+                                placeholder="Your bio here"
+                            />
+                                {links.length > 0 && links[0] !== '' && (
+                                    <Flex>
+                                        {links.map((link, index) => (
+                                            <a key={index} href={link} target="_blank" rel="noopener noreferrer">
+                                                {link}
+                                            </a>
+                                        ))}
+                                    </Flex>
+                                )}
+                            <Button $style={{ bg: "#A259FF", color: "white", p: "0.5rem 1rem", kind: "radius" }} onClick={handleSubmit}>Save Bio</Button>
+                        </Box>
+                        </Modal>
                         <Flex $style={{
                             gap: "3rem"
                         }}>
-                            <Flex $style={{
-                                fDirection: "column"
-                            }}>
-                                <Heading level={4}>0.00</Heading>
-                                <Span>Volume</Span>
-                            </Flex>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>
@@ -371,12 +627,15 @@ export default function ProfilePage() {
                             >
                                 LIST NFT
                             </button>
-                            <button style={{
+                            <button
+                            onClick={openBioModal}
+                            style={{
                                 border: "1px solid #A259FF",
                                 borderRadius: "1rem",
                                 padding: "1rem",
                                 zIndex: "1000"
-                            }}>
+                            }}
+                            >
                                 SETTINGS
                             </button>
                         </Flex>
@@ -404,10 +663,7 @@ export default function ProfilePage() {
                     hAlign: "space-between"
                 }}>
                     <TabHeader onClick={() => changeActiveTab(0)} isActive={0 === activeTab}>
-                        <Span>Owned</Span>
-                    </TabHeader>
-                    <TabHeader onClick={() => changeActiveTab(1)} isActive={1 === activeTab}>
-                        <Span>Created</Span>
+                        <Span>Inventory</Span>
                     </TabHeader>
                     <TabHeader onClick={() => changeActiveTab(2)} isActive={2 === activeTab}>
                         <Span>Activity</Span>

@@ -108,6 +108,28 @@ const tableCellStyle = {
   borderBottom: '1px solid #ddd',
 };
 
+const sampleCellStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '20px',
+  height: '20px',
+  borderRadius: '3px',
+  marginRight: '5px',
+};
+
+const sampleLabelStyle = {
+  fontSize: '0.8rem',
+  marginRight: '10px',
+  padding: '8px'
+};
+
+const sampleRowStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '10px',
+};
+
 const getColorForCount = (count: number): string => {
     if (count === 0) return '#e0e0e0'; // Empty color
     if (count <= 5) return '#c6e48b'; // Light green
@@ -137,7 +159,28 @@ const ContributionOverview: React.FC<ContributionOverviewProps> = ({ initialYear
         return str;
       }
       return `${str.slice(0, 6)}...${str.slice(-4)}`;
-    };   
+    };
+
+    const SampleCells = () => {
+      const samples = [
+        { count: 0, label: 'Chill Day == 0' },
+        { count: 5, label: 'Easy Day <= 1' },
+        { count: 10, label: 'Proper Work <= 5' },
+        { count: 15, label: 'Trader Day <= 10' },
+        { count: 20, label: 'Hard Work <= 15' },
+      ];
+    
+      return (
+        <div>
+          {samples.map((sample) => (
+            <div key={sample.label} style={sampleRowStyle}>
+              <div style={{ ...sampleCellStyle, backgroundColor: getColorForCount(sample.count) }} />
+              <span style={sampleLabelStyle}>{sample.label}</span>
+            </div>
+          ))}
+        </div>
+      );
+    };    
 
     useEffect(() => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -319,6 +362,7 @@ const ContributionOverview: React.FC<ContributionOverviewProps> = ({ initialYear
                 Next Year
             </button>
         </div>
+      <Flex $style={{ display: 'flex', justifyContent: 'center'}}>
         <div style={styles.calendar}>
             <div style={styles.monthLabel}>
             {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(month => (
@@ -345,6 +389,8 @@ const ContributionOverview: React.FC<ContributionOverviewProps> = ({ initialYear
             );
             })}
         </div>
+        <SampleCells />
+      </Flex>
         <div>
           <EventTabs events={events} />
         </div>

@@ -10,8 +10,84 @@ import appConstants from "constant";
 import { Chrono } from "react-chrono";
 import AccordionSection from "./accordion";
 import Footer from "components/footer";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+
+const SocialLinks = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+`;
 
 export default function LandingPage() {
+    const [activeProfile, setActiveProfile] = useState<number | null>(null);
+    
+    const socialLinksStyle = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '10px',
+        opacity: 0,
+        transition: 'opacity 0.5s ease',
+    };
+
+    // Анимация появления иконок
+    const hoverStyle = {
+        opacity: 1,
+    };
+    const teamMembers = [
+        {
+            name: "0xruffbuff.eth",
+            role: "CEO & Founder",
+            image: appConstants.Imgs.TEAM1,
+            socialLinks: [
+                { icon: "github", url: "https://github.com/ruffbuff" },
+                { icon: "x-twitter", url: "https://twitter.com/RuffBuff_" },
+                { icon: "linkedin", url: "https://www.linkedin.com/in/sergei-avramtsuk-59a040255/" },
+            ],
+        },
+        {
+            name: "N I T O",
+            role: "Main Artist",
+            image: appConstants.Imgs.TEAM3,
+            socialLinks: [
+                { icon: "x-twitter", url: "#twitter" },
+            ],
+        },
+        {
+            name: "Gazz",
+            role: "Web3 Manager",
+            image: appConstants.Imgs.TEAM4,
+            socialLinks: [
+                { icon: "x-twitter", url: "https://twitter.com/Web3_Connector" },
+            ],
+        },
+        {
+            name: "Abcrypt100",
+            role: "BD & CM",
+            image: appConstants.Imgs.TEAM2,
+            socialLinks: [
+                { icon: "x-twitter", url: "https://twitter.com/Abcrypt100" },
+                { icon: "linkedin", url: "https://www.linkedin.com/in/abdulgafar-ojewale-6b660325b/" },
+            ],
+        },
+        {
+            name: "Tadashi",
+            role: "Front-end Dev",
+            image: appConstants.Imgs.TEAM5,
+            socialLinks: [
+                { icon: "github", url: "https://github.com/shinobi8894" },
+                { icon: "x-twitter", url: "https://twitter.com/TadashiAmano" },
+                { icon: "linkedin", url: "https://www.linkedin.com/in/tadashi-amano/" },
+            ],
+        },
+        // Добавьте других членов команды здесь
+    ];
+
     const items = [
         {
             title: "Start 2023 May",
@@ -356,117 +432,37 @@ export default function LandingPage() {
                     columns: "4",
                     gap: "2rem",
                     $queries: {
-                        1180: {
-                            columns: "3"
-                        },
-                        880: {
-                            columns: "2"
-                        },
-                        450: {
-                            columns: "1"
-                        }
+                        1180: { columns: "3" },
+                        880: { columns: "2" },
+                        450: { columns: "1" }
                     }
                 }}>
-                    <Flex $style={{
+                    {teamMembers.map((member, index) => (
+                    <Flex
+                        key={index}
+                        onMouseEnter={() => setActiveProfile(index)}
+                        onMouseLeave={() => setActiveProfile(null)}
+                        $style={{
                         fDirection: "column",
                         background: "rgba(16, 16, 16, 0.20)",
-                        radius: "25px"
-                    }}>
-                        <Flex $style={{
-                            overflow: "hidden",
-                            radius: "1rem 1rem 0 0"
-                        }}>
-                            <Image src={appConstants.Imgs.TEAM1} />
+                        radius: "25px",
+                        }}
+                    >
+                        <Image src={member.image} />
+                        <Flex $style={{ fDirection: "column", p: "1rem" }}>
+                        <Heading level={4}>{member.name}</Heading>
+                        <Heading gradient level={5}>{member.role}</Heading>
                         </Flex>
-                        <Flex $style={{
-                            fDirection: "column",
-                            p: "1rem",
-                            gap: "1rem"
-                        }}>
-                            <Heading level={4}>0xruffbuff.eth</Heading>
-                            <Heading gradient level={5}>CEO & Founder</Heading>
-                        </Flex>
+
+                        <SocialLinks style={{ ...(activeProfile === index ? hoverStyle : { opacity: 0 }) }}>
+                        {member.socialLinks.map((link, linkIndex) => (
+                            <a key={linkIndex} href={link.url} style={{ margin: '0 5px' }}>
+                            <Icon icon={link.icon} />
+                            </a>
+                        ))}
+                        </SocialLinks>
                     </Flex>
-                    <Flex $style={{
-                        fDirection: "column",
-                        background: "rgba(16, 16, 16, 0.20)",
-                        radius: "25px"
-                    }}>
-                        <Flex $style={{
-                            overflow: "hidden",
-                            radius: "1rem 1rem 0 0"
-                        }}>
-                            <Image src={appConstants.Imgs.TEAM3} />
-                        </Flex>
-                        <Flex $style={{
-                            fDirection: "column",
-                            p: "1rem",
-                            gap: "1rem"
-                        }}>
-                            <Heading level={4}>N I T O</Heading>
-                            <Heading gradient level={5}>Main Artist</Heading>
-                        </Flex>
-                    </Flex>
-                    <Flex $style={{
-                        fDirection: "column",
-                        background: "rgba(16, 16, 16, 0.20)",
-                        radius: "25px"
-                    }}>
-                        <Flex $style={{
-                            overflow: "hidden",
-                            radius: "1rem 1rem 0 0"
-                        }}>
-                            <Image src={appConstants.Imgs.TEAM4} />
-                        </Flex>
-                        <Flex $style={{
-                            fDirection: "column",
-                            p: "1rem",
-                            gap: "1rem"
-                        }}>
-                            <Heading level={4}>Gazz</Heading>
-                            <Heading gradient level={5}>Web3 Manager</Heading>
-                        </Flex>
-                    </Flex>
-                    <Flex $style={{
-                        fDirection: "column",
-                        background: "rgba(16, 16, 16, 0.20)",
-                        radius: "25px"
-                    }}>
-                        <Flex $style={{
-                            overflow: "hidden",
-                            radius: "1rem 1rem 0 0"
-                        }}>
-                            <Image src={appConstants.Imgs.TEAM2} />
-                        </Flex>
-                        <Flex $style={{
-                            fDirection: "column",
-                            p: "1rem",
-                            gap: "1rem"
-                        }}>
-                            <Heading level={4}>Abcrypt100</Heading>
-                            <Heading gradient level={5}>BD & CM</Heading>
-                        </Flex>
-                    </Flex>
-                    <Flex $style={{
-                        fDirection: "column",
-                        background: "rgba(16, 16, 16, 0.20)",
-                        radius: "25px"
-                    }}>
-                        <Flex $style={{
-                            overflow: "hidden",
-                            radius: "1rem 1rem 0 0"
-                        }}>
-                            <Image src={appConstants.Imgs.TEAM5} />
-                        </Flex>
-                        <Flex $style={{
-                            fDirection: "column",
-                            p: "1rem",
-                            gap: "1rem"
-                        }}>
-                            <Heading level={4}>Tadashi</Heading>
-                            <Heading gradient level={5}>Front-end Dev</Heading>
-                        </Flex>
-                    </Flex>
+                    ))}
                 </Grid>
             </Flex>
             <Flex $style={{

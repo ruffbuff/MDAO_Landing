@@ -160,10 +160,12 @@ export default function MpLandingPage() {
                             contractAddress={CONTRACT_SANDBOX || 'defaultAddress'} 
                             collectionTitle="Sandbox"
                         />
-                        <TrendingCollection 
-                            contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'} 
-                            collectionTitle="Trump DTC Collection S2"
-                        />
+                        <Link to={configs.appConfigs.path.COLLECTION_PREFIX2}>
+                            <TrendingCollection 
+                                contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'} 
+                                collectionTitle="Trump DTC Collection S2"
+                            />
+                        </Link>
                         <Link to={configs.appConfigs.path.COLLECTION_PREFIX}>
                             <TrendingCollection 
                                 contractAddress={CONTRACT_AWAKENED || 'defaultAddress'} 

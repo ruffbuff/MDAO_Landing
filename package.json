@@ -1,6 +1,6 @@
 {
   "name": "mdao",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -29,6 +29,7 @@
     "http-browserify": "^1.7.0",
     "https-browserify": "^1.0.0",
     "latest": "^0.2.0",
+    "lodash": "^4.17.21",
     "moralis": "^2.23.2",
     "react": "^18.2.0",
     "react-chrono": "^2.3.1",

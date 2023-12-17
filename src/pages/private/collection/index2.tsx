@@ -11,7 +11,7 @@ import appConstants from "constant";
 import {
     CONTRACT_ADDRESS_2,
     CONTRACT_ABI_2,
-    CONTRACT_AWAKENED
+    CONTRACT_TRUMPDTC
 } from "../../../solContracts";
 import { ethers } from 'ethers';
 import { useAddress } from "@thirdweb-dev/react";
@@ -28,7 +28,7 @@ interface NFT {
     media: { gateway: string }[];
     title: string;
 }
-export default function KabanaClubPage() {
+export default function TrumpDTCPage() {
     const connectedAddress = useAddress();
     const navigate = useNavigate();
     const { setSelectedNft } = useNft();
@@ -67,7 +67,7 @@ export default function KabanaClubPage() {
             const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
             const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider);
     
-            const collectionAddress = CONTRACT_AWAKENED;
+            const collectionAddress = CONTRACT_TRUMPDTC;
             const data = await contract.collectionsData(collectionAddress);
             
             setCollectionStats({
@@ -94,8 +94,7 @@ export default function KabanaClubPage() {
         });
     };
 
-    // Define the collection address for Kabana Club (or pass it as a prop)
-    const kabanaClubCollectionAddress = CONTRACT_AWAKENED; // Replace with actual collection address if different
+    const trumpDTCCollectionAddress = CONTRACT_TRUMPDTC; // Replace with actual collection address if different
 
     // Modify fetchNFTs to filter NFTs by the collection address
     const fetchNFTs = async () => {
@@ -114,7 +113,7 @@ export default function KabanaClubPage() {
                 const paymentType = listing[6] === 0 ? 'MATIC' : 'AMBER';
 
                 // Fetch NFT metadata only if the contract address matches the collection address
-                if (contractAddress.toLowerCase() === kabanaClubCollectionAddress.toLowerCase()) {
+                if (contractAddress.toLowerCase() === trumpDTCCollectionAddress.toLowerCase()) {
                     const url = `https://polygon-mainnet.g.alchemy.com/nft/v2/${apiKey}/getNFTMetadata?contractAddress=${contractAddress}&tokenId=${tokenId}`;
                     const response = await fetch(url, { headers: { accept: 'application/json' } });
                     const data = await response.json();
@@ -147,7 +146,7 @@ export default function KabanaClubPage() {
 
     useEffect(() => {
         const fetchOwnersData = async () => {
-            const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${process.env.REACT_APP_ALCHEMY_API_KEY}/getOwnersForContract?contractAddress=${CONTRACT_AWAKENED}&withTokenBalances=true`;
+            const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${process.env.REACT_APP_ALCHEMY_API_KEY}/getOwnersForContract?contractAddress=${CONTRACT_TRUMPDTC}&withTokenBalances=true`;
             try {
                 const response = await fetch(url, { headers: { accept: 'application/json' } });
                 const data = await response.json();
@@ -201,7 +200,7 @@ export default function KabanaClubPage() {
             zIndex: "1"
         }}>
             <Flex $style={{
-                background: `url(https://i.seadn.io/gcs/files/5643ea2b3e6e6341df027bdebb027ab2.png?auto=format&dpr=1&w=3840)`,
+                background: `url(https://i.seadn.io/gcs/files/61a7eb876efd25dcfd8bbb52b84c6ba4.jpg?auto=format&dpr=1&w=3840)`,
                 h: "32rem",
                 mb: "2rem",
                 w: "100%"
@@ -237,12 +236,12 @@ export default function KabanaClubPage() {
                                 p: ".5rem 1rem",
                                 radius: "1rem"
                             }}>
-                                <Span>Kabana Club</Span>
+                                <Span>DIGITIAL COLLECTIBLES</Span>
                             </Flex>
                             {firstNFT && (
                                 <>
-                                    <Heading level={2}>Awakened Mushrooms</Heading>
-                                    <a href="https://kabana.club/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                    <Heading level={2}>Trump DTC Collection</Heading>
+                                    <a href="" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                         <Button $style={{
                                             bg: "white",
                                             color: "black",
@@ -277,7 +276,7 @@ export default function KabanaClubPage() {
                     mb: "2rem"
                 }}>
                     <Image 
-                        src="https://i.seadn.io/gae/Cb_v8uUJT_VBQPJzkYb1K6r88zCkWDQcFoPHYqc-HfsPFNpRCLxqLk64Pr6n00AdPNrNjVzg54n04V8MyQ45a4XUtE_6lQwXYLF6cA?auto=format&dpr=1&w=128" 
+                        src="https://i.seadn.io/gcs/files/f980181df268011a4491137fc71afdb5.jpg?auto=format&dpr=1&w=128" 
                         style={{ 
                             alignSelf: "start",
                             width: "100px",
@@ -456,7 +455,7 @@ export default function KabanaClubPage() {
                                             gap: "0.5rem"
                                         }}>
                                             <Image 
-                                                src="https://i.seadn.io/gae/Cb_v8uUJT_VBQPJzkYb1K6r88zCkWDQcFoPHYqc-HfsPFNpRCLxqLk64Pr6n00AdPNrNjVzg54n04V8MyQ45a4XUtE_6lQwXYLF6cA?auto=format&dpr=1&w=128" 
+                                                src="https://i.seadn.io/gcs/files/f980181df268011a4491137fc71afdb5.jpg?auto=format&dpr=1&w=128" 
                                                 style={{ 
                                                     width: "30px",
                                                     height: "30px",
