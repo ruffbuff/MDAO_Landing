@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from "components/basic/button";
 import Flex from "components/basic/flex";
 import Grid from "components/basic/grid";
@@ -7,11 +7,10 @@ import Heading from "components/basic/heading";
 import Icon from "components/basic/icon";
 import { Input } from "components/basic/input";
 import { P, Span } from "components/basic/text";
-import appConstants from "constant";
 import {
-    CONTRACT_ADDRESS_2,
-    CONTRACT_ABI_2,
-    CONTRACT_AWAKENED
+    CONTRACT_ADDRESS_2, CONTRACT_ABI_2,
+    CONTRACT_AWAKENED,
+    CONTRACT_AMBER, CONTRACT_AMBER_ABI
 } from "../../../solContracts";
 import { ethers } from 'ethers';
 import { useAddress } from "@thirdweb-dev/react";
@@ -38,7 +37,8 @@ export default function KabanaClubPage() {
     const [collectionStats, setCollectionStats] = useState({
         totalListed: 0,
         totalSold: 0,
-        floorPrice: 0
+        floorPrice: 0,
+        floorPriceEth: 0
     });
     const [searchQuery, setSearchQuery] = useState('');
     const [totalOwners, setTotalOwners] = useState(0);
@@ -60,6 +60,19 @@ export default function KabanaClubPage() {
 
     const isNftSelected = (nft: NFT) => selectedNfts.some(selectedNft => selectedNft.id === nft.id);
     
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const amberContract = new ethers.Contract(CONTRACT_AMBER, CONTRACT_AMBER_ABI, provider.getSigner());
+
+    const approveAMBER = async (amount: any) => {
+        try {
+            const transaction = await amberContract.approve(CONTRACT_ADDRESS_2, amount);
+            await transaction.wait();
+            console.log('AMBER approved successfully');
+        } catch (error) {
+            console.error('Error during AMBER approve:', error);
+        }
+    };
+
     const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
     
     const fetchCollectionData = async () => {
@@ -73,7 +86,8 @@ export default function KabanaClubPage() {
             setCollectionStats({
                 totalListed: data.totalListed.toNumber(),
                 totalSold: data.totalSold.toNumber(),
-                floorPrice: parseFloat(ethers.utils.formatEther(data.floorPrice))
+                floorPrice: parseFloat(ethers.utils.formatEther(data.floorPrice)),
+                floorPriceEth: parseFloat(ethers.utils.formatEther(data.floorPrice))
             });            
         } catch (error) {
             console.error('Error fetching collection data:', error);
@@ -98,7 +112,7 @@ export default function KabanaClubPage() {
     const kabanaClubCollectionAddress = CONTRACT_AWAKENED; // Replace with actual collection address if different
 
     // Modify fetchNFTs to filter NFTs by the collection address
-    const fetchNFTs = async () => {
+    const fetchNFTs = useCallback(async () => {
         setIsLoading(true);
         try {
             const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
@@ -113,7 +127,6 @@ export default function KabanaClubPage() {
                 const priceInEther = ethers.utils.formatEther(priceInWei);
                 const paymentType = listing[6] === 0 ? 'MATIC' : 'AMBER';
 
-                // Fetch NFT metadata only if the contract address matches the collection address
                 if (contractAddress.toLowerCase() === kabanaClubCollectionAddress.toLowerCase()) {
                     const url = `https://polygon-mainnet.g.alchemy.com/nft/v2/${apiKey}/getNFTMetadata?contractAddress=${contractAddress}&tokenId=${tokenId}`;
                     const response = await fetch(url, { headers: { accept: 'application/json' } });
@@ -139,11 +152,11 @@ export default function KabanaClubPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [kabanaClubCollectionAddress, apiKey]);
 
     useEffect(() => {
         fetchNFTs();
-    }, []);
+    }, [fetchNFTs]);
 
     useEffect(() => {
         const fetchOwnersData = async () => {
@@ -169,26 +182,31 @@ export default function KabanaClubPage() {
 
     const handleBuy = async (selectedNft: NFT) => {
         if (!selectedNft) return;
-
+    
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider.getSigner());
-        try {
-            let transaction;
-            if (selectedNft.paymentType === 'MATIC') {
-                transaction = await contract.buyWithMATIC(selectedNft.listingId, { value: ethers.utils.parseEther(selectedNft.price) });
-            } else if (selectedNft.paymentType === 'AMBER') {
-                const tokenAmount = ethers.utils.parseEther(selectedNft.price);
-                transaction = await contract.buyWithAMBER(selectedNft.listingId, tokenAmount);
-            }
-
-            if (transaction) {
+        const marketContract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider.getSigner());
+    
+        if (selectedNft.paymentType === 'AMBER') {
+            const tokenAmount = ethers.utils.parseEther(selectedNft.price);
+            await approveAMBER(tokenAmount);
+    
+            try {
+                const transaction = await marketContract.buyWithAMBER(selectedNft.listingId, tokenAmount);
                 await transaction.wait();
-                console.log('Transaction successful');
+                console.log('AMBER NFT purchase successful');
+            } catch (error) {
+                console.error('AMBER purchase transaction failed:', error);
             }
-        } catch (error) {
-            console.error('Transaction failed:', error);
+        } else if (selectedNft.paymentType === 'MATIC') {
+            try {
+                const transaction = await marketContract.buyWithMATIC(selectedNft.listingId, { value: ethers.utils.parseEther(selectedNft.price) });
+                await transaction.wait();
+                console.log('MATIC NFT purchase successful');
+            } catch (error) {
+                console.error('MATIC purchase transaction failed:', error);
+            }
         }
-    };
+    };    
 
     const firstNFT = nftsList.length > 0 ? nftsList[0] : null;
 
@@ -316,6 +334,13 @@ export default function KabanaClubPage() {
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
+                        <Heading level={4}>{collectionStats.floorPriceEth} MATIC</Heading>
+                        <Span>Floor price</Span>
+                    </Flex>
+                    <Flex $style={{
+                        fDirection: "column",
+                        gap: ".5rem"
+                    }}>
                         <Heading level={4}>{collectionStats.totalSold}</Heading>
                         <Span>Total Sold</Span>
                     </Flex>
@@ -422,7 +447,7 @@ export default function KabanaClubPage() {
                         width: '100%',
                         border: isSelected ? "1px solid white" : "none",
                         borderRadius: "2rem",
-                        background: isOwnedByUser ? "rgba(0, 128, 0, .5)" : (isSelected ? "rgba(16,16,16,.5)" : "rgba(16,16,16,.2)"), // Подсветка в зависимости от статуса
+                        background: isOwnedByUser ? "rgba(0, 128, 0, .5)" : (isSelected ? "rgba(16,16,16,.5)" : "rgba(16,16,16,.2)"),
                     };
 
                     return (

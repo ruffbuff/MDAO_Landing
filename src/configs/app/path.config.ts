@@ -5,6 +5,7 @@ const path = {
     PROFILE_PREFIX : 'profile',
     COLLECTION_PREFIX : 'kabanaclub',
     COLLECTION_PREFIX2 : 'trumpdtc',
+    COLLECTION_PREFIXT : 'test',
     COLLECTION_PREFIX3 : 'wildpass',
     COLLECTION_PREFIX4 : 'sandbox',
     COLLECTION_PREFIX5 : 'trumpdtc2',

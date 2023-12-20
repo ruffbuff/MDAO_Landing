@@ -15,9 +15,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {
-    CONTRACT_ABI_2,
-    CONTRACT_ADDRESS_2,
-    CONTRACT_ABI_AWAKENED,
+    CONTRACT_ABI_2, CONTRACT_ADDRESS_2,
+    CONTRACT_ABI_AWAKENED, CONTRACT_AWAKENED,
     CONTRACT_SMARTDB, CONTRACT_SMARTDB_ABI
 } from "../../../solContracts";
 import ContributionOverview from './components/Contribution';
@@ -100,11 +99,6 @@ export default function ProfilePage() {
         setIsDataChanged(true);
     };
 
-    const handleLinksChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLinks([event.target.value]);
-        setIsDataChanged(true);
-    };
-
     const openBioModal = () => {
         setBioModalOpen(true);
     };
@@ -135,7 +129,7 @@ export default function ProfilePage() {
         let fetchedUserId;
         try {
             fetchedUserId = await contract.getUserIdByWallet(address);
-            console.log('User ID fetched:', fetchedUserId);
+            //console.log('User ID fetched:', fetchedUserId);
         } catch (error) {
             console.error('Error fetching user ID:', error);
             return;
@@ -145,10 +139,9 @@ export default function ProfilePage() {
         let avatarLink = '0'; // Default value
         let bannerLink = '0'; // Default value
         let bioData = '0';    // Default value
-        let linksData = ['0']; // Default value as an array with a single '0' element
 
         if (!isDataChanged) {
-            console.log('No data changed, skipping update');
+            //console.log('No data changed, skipping update');
             return;
         }
 
@@ -174,13 +167,12 @@ export default function ProfilePage() {
             }
     
             const data = await response.json();
-            console.log('Profile data:', data);
+            //console.log('Profile data:', data);
     
             // Use the received data if available
             avatarLink = data.avatarLink || avatarLink;
             bannerLink = data.bannerLink || bannerLink;
             bioData = data.bio || bioData;
-            linksData = links.length > 0 && links[0] !== '' ? links : linksData;
     
             // Update frontend state with the new data
             setAvatarUrl(avatarLink);
@@ -195,7 +187,7 @@ export default function ProfilePage() {
             // Call the smart contract function
             try {
                 await contract.updateProfile(userIdNumber, avatarLink, bannerLink, bioData, linksArray);
-                console.log('Profile updated in smart contract');
+                //console.log('Profile updated in smart contract');
                 setIsDataChanged(false);
             } catch (error) {
                 console.error('Error updating profile in smart contract:', error);
@@ -205,25 +197,23 @@ export default function ProfilePage() {
         }
     };    
 
-    const fetchNFTsDebounced = debounce((address) => {
-        if (!address) return;
-
-        const options = { method: 'GET', headers: { accept: 'application/json' } };
-        const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
-        const timestamp = new Date().getTime();
-        const alchemyURL = `https://polygon-mainnet.g.alchemy.com/nft/v3/${apiKey}/getNFTsForOwner?owner=${address}&withMetadata=true&pageSize=100&timestamp=${timestamp}`;
-
-        fetch(alchemyURL, options)
-            .then(response => response.json())
-            .then(data => {
-                // ... process data
-            })
-            .catch(err => console.error('Error fetching NFTs:', err));
-    }, 1000); // Debounce for 1 second
-
     useEffect(() => {
-        fetchNFTsDebounced(address);
-    }, [address]);
+        const debouncedFetchNFTs = debounce((address) => {
+            const options = { method: 'GET', headers: { accept: 'application/json' } };
+            const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
+            const timestamp = new Date().getTime();
+            const alchemyURL = `https://polygon-mainnet.g.alchemy.com/nft/v3/${apiKey}/getNFTsForOwner?owner=${address}&withMetadata=true&pageSize=100&timestamp=${timestamp}`;
+    
+            fetch(alchemyURL, options)
+                .then(response => response.json())
+                .then(data => {
+                    // ... process data
+                })
+                .catch(err => console.error('Error fetching NFTs:', err));
+        }, 1000);
+    
+        debouncedFetchNFTs(address);
+    }, [address]);    
     
     useEffect(() => {
         const fetchProfile = async () => {
@@ -239,7 +229,7 @@ export default function ProfilePage() {
                 setBannerUrl(profileData.bannerPic);
                 setBio(profileData.bioData);
                 setLinks(profileData.links);
-                console.log('Profile data fetched:', profileData);
+                //console.log('Profile data fetched:', profileData);
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -266,10 +256,11 @@ export default function ProfilePage() {
 
     const allowedAddresses = useMemo(() => [
         "0x564e6588DAfA2F79c5805e07860CB869AEdb33d9",
-        "0x24A11e702CD90f034Ea44FaF1e180C0C654AC5d9",
+        "0x24a11e702cd90f034ea44faf1e180c0c654ac5d9",
         "0xEf41141fBC0A7C870F30feE81c6214582DC2A494",
         "0x9d305a42A3975Ee4c1C57555BeD5919889DCE63F",
-        "0xE28D2D8746D855251BA677a91626009CB33aA4F9"
+        "0xE28D2D8746D855251BA677a91626009CB33aA4F9",
+        "0x72fDE21792157AFfFcdCfEa7382d048BeC80a41A"
     ], []);
 
     const style = {
@@ -330,9 +321,9 @@ export default function ProfilePage() {
 
     const getNFTCountFromAlchemy = async (ownerAddress: string): Promise<number> => {
         const alchemyApiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
-        const contractAddress = "0x564e6588DAfA2F79c5805e07860CB869AEdb33d9";
-        const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${alchemyApiKey}/getNFTsForOwner?owner=${ownerAddress}&contractAddresses[]=${contractAddress}&withMetadata=true&pageSize=100&orderBy=transferTime`;
-    
+        const awakenedContractAddress = CONTRACT_AWAKENED;
+        const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${alchemyApiKey}/getNFTsForOwner?owner=${ownerAddress}&contractAddresses[]=${encodeURIComponent(awakenedContractAddress)}&withMetadata=true&pageSize=100&orderBy=transferTime`;
+        
         try {
             const response = await fetch(url, { method: 'GET', headers: { accept: 'application/json' } });
             const data = await response.json();
@@ -354,41 +345,42 @@ export default function ProfilePage() {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
-            
+            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, signer);
+    
             if (!address) {
                 console.error("Address is undefined.");
+                setIsListing(false);
                 return;
             }
     
             const nftCount = await getNFTCountFromAlchemy(address);
-            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, signer);
-    
-            const priceInWei = ethers.utils.parseUnits(price, 'ether');
-            let commission;
-    
-            if (nftCount >= 3) {
-                commission = 0;
-            } else if (nftCount >= 1) {
-                commission = ethers.utils.parseUnits('0.07', 'ether');
-            } else {
+            let commission = ethers.BigNumber.from(0);
+            if (nftCount < 1) {
                 commission = ethers.utils.parseUnits('0.35', 'ether');
+            } else if (nftCount < 3) {
+                commission = ethers.utils.parseUnits('0.07', 'ether');
             }
+    
+            const transactionOptions = { value: commission };
     
             if (listingType === 'AMBER') {
-                await contract.listForAMBER(nftAddress, tokenId, price, { value: commission });
+                const transaction = await contract.listForAMBER(nftAddress, tokenId, ethers.utils.parseUnits(price, 'ether'), transactionOptions);
+                const receipt = await transaction.wait();
+                console.log('AMBER Transaction successful:', receipt);
             } else {
-                await contract.listForMATIC(nftAddress, tokenId, priceInWei, { value: commission });
+                const transaction = await contract.listForMATIC(nftAddress, tokenId, ethers.utils.parseUnits(price, 'ether'), transactionOptions);
+                const receipt = await transaction.wait();
+                console.log('MATIC Transaction successful:', receipt);
             }
     
-            console.log(`${listingType} listing successful for token ID ${tokenId}`);
             setOpen(false);
         } catch (error) {
             console.error(`Error listing NFT for ${listingType}:`, error);
         } finally {
             setIsListing(false);
         }
-    };    
-
+    };      
+    
     const handleListNFT = () => {
         if (!selectedNft) {
             alert('Please select an NFT to list.');
@@ -439,6 +431,7 @@ export default function ProfilePage() {
                                 name: nft.contract?.name,
                             },
                 }));
+                //console.log("Filtered NFTs:", filteredNfts);
               setNfts(filteredNfts);
             })
             .catch(err => console.error(err));

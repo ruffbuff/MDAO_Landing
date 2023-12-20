@@ -28,6 +28,7 @@ const NFTCollectionFetcher = () => {
     const [drillClubData, setDrillClubData] = useState<CollectionData>({ name: '', totalSupply: '', imageUrl: '', totalSold: 0, floorPrice: '' });
     const [voxiesData, setVoxiesData] = useState<CollectionData>({name: '', totalSupply: '', imageUrl: '', totalSold: 0, floorPrice: ''});
     const [sunflowerLandCollectiblesData, setSunflowerlandcollectiblesData] = useState<CollectionData>({name: '', totalSupply: '', imageUrl: '', totalSold: 0, floorPrice: ''});
+    const [simplenftcollectionData, setSimplenftcollectionData] = useState<CollectionData>({name: '', totalSupply: '', imageUrl: '', totalSold: 0, floorPrice: ''});
 
     useEffect(() => {
         const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
@@ -44,6 +45,8 @@ const NFTCollectionFetcher = () => {
 
         const fetchCollectionData = async () => {
             try {
+                const simplenftcollectionCollectionTotalSupply = await fetchTotalSupply("0x72fDE21792157AFfFcdCfEa7382d048BeC80a41A");
+                const simplenftcollectionCollection = await contract.collectionsData("0x72fDE21792157AFfFcdCfEa7382d048BeC80a41A");
                 const sunflowerLandCollectiblesCollectionTotalSupply = await fetchTotalSupply("0x22d5f9b75c524fec1d6619787e582644cd4d7422");
                 const sunflowerLandCollectiblesCollection = await contract.collectionsData("0x22d5f9b75c524fec1d6619787e582644cd4d7422");
                 const voxiesCollectionTotalSupply = await fetchTotalSupply("0xfbe3ab0cbfbd17d06bdd73aa3f55aaf038720f59");
@@ -144,6 +147,13 @@ const NFTCollectionFetcher = () => {
                     imageUrl: 'https://i.seadn.io/gcs/files/28fa724d563d487f753580f2c9bf6c3e.png?auto=format&dpr=1&w=128',
                     totalSold: sunflowerLandCollectiblesCollection.totalSold.toNumber(),
                     floorPrice: ethers.utils.formatUnits(sunflowerLandCollectiblesCollection.floorPrice, 'ether')
+                });
+                setSimplenftcollectionData({
+                    name: 'SimpleNFTCollection',
+                    totalSupply: simplenftcollectionCollectionTotalSupply,
+                    imageUrl: 'https://ipfs.io/ipfs/QmW55fwqJW6JgPs2BiSoZDcsJLfSCf91Vz8BhqYmDtU9my/pp.webp',
+                    totalSold: simplenftcollectionCollection.totalSold.toNumber(),
+                    floorPrice: ethers.utils.formatUnits(simplenftcollectionCollection.floorPrice, 'ether')
                 });
             } catch (error) {
                 console.error('Error fetching contract data', error);
@@ -306,6 +316,20 @@ const NFTCollectionFetcher = () => {
                 <Td><Span>{sunflowerLandCollectiblesData.totalSupply}</Span></Td>
                 <Td><Span>{sunflowerLandCollectiblesData.totalSold}</Span></Td>
                 <Td><Span>{sunflowerLandCollectiblesData.floorPrice} AMBER</Span></Td>
+                <Td><Span>0</Span></Td>
+            </Tr>
+            <Tr>
+                <Td>
+                    <Flex $style={{vAlign: "center", gap: "1rem"}}>
+                        <Flex $style={{maxW: "5rem"}}>
+                            <Image $style={{radius: "1rem"}} src={simplenftcollectionData.imageUrl}/>
+                        </Flex>
+                        <Heading level={4}>{simplenftcollectionData.name}</Heading>
+                    </Flex>
+                </Td>
+                <Td><Span>{simplenftcollectionData.totalSupply}</Span></Td>
+                <Td><Span>{simplenftcollectionData.totalSold}</Span></Td>
+                <Td><Span>{simplenftcollectionData.floorPrice} AMBER</Span></Td>
                 <Td><Span>0</Span></Td>
             </Tr>
         </>

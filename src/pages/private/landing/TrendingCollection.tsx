@@ -17,6 +17,19 @@ const TrendingCollection: React.FC<TrendingCollectionProps> = ({ contractAddress
     const [fetchedData, setFetchedData] = useState<any>(null);
 
     useEffect(() => {
+        // Helper function to process fetched or cached data
+        const processData = (data: any) => {
+            if (data && Array.isArray(data.nfts)) {
+                const images = data.nfts.map((nft: any) => nft.image.originalUrl).slice(0, 3);
+                setNftImages(images);
+                const totalSupply = parseInt(data.nfts[0]?.contract?.totalSupply, 10);
+                setRemainingNfts(Math.max(totalSupply - images.length, 0));
+                if (!collectionTitle && data.nfts[0]?.contract?.name) {
+                    setCollectionName(data.nfts[0].contract.name);
+                }
+            }
+        };
+
         const cacheKey = `nftData-${contractAddress}`;
         const cachedData = sessionStorage.getItem(cacheKey);
         if (cachedData) {
@@ -38,19 +51,6 @@ const TrendingCollection: React.FC<TrendingCollectionProps> = ({ contractAddress
             fetchNFTs();
         }
     }, [contractAddress, collectionTitle]);
-
-    // Helper function to process fetched or cached data
-    const processData = (data: any) => {
-        if (data && Array.isArray(data.nfts)) {
-            const images = data.nfts.map((nft: any) => nft.image.originalUrl).slice(0, 3);
-            setNftImages(images);
-            const totalSupply = parseInt(data.nfts[0]?.contract?.totalSupply, 10);
-            setRemainingNfts(Math.max(totalSupply - images.length, 0));
-            if (!collectionTitle && data.nfts[0]?.contract?.name) {
-                setCollectionName(data.nfts[0].contract.name);
-            }
-        }
-    };
 
     useEffect(() => {
         if (fetchedData && Array.isArray(fetchedData.nfts)) {

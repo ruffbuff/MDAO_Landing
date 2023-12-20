@@ -5,7 +5,6 @@ import { useAddress } from "@thirdweb-dev/react";
 import { CONTRACT_ABI_2, CONTRACT_ADDRESS_2 } from "../../../../solContracts";
 import { ethers } from 'ethers';
 import Flex from "components/basic/flex";
-import Heading from "components/basic/heading";
 
 type Contributions = {
   [key: string]: number;
@@ -290,7 +289,7 @@ const ContributionOverview: React.FC<ContributionOverviewProps> = ({ initialYear
         };
     }, [userAddress]);
 
-    const EventTabs = ({ events: events }: { events: EthereumEvent[] }) => {
+    const EventTabs = ({ events }: { events: EthereumEvent[] }) => {
       return (
         <div style={{ overflowX: 'auto' }}>
           <table

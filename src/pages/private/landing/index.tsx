@@ -14,7 +14,7 @@ import Icon from "components/basic/icon"
 import configs from "configs";
 import NFTCollectionFetcher from './NFTCollectionFetcher';
 import TrendingCollection from './TrendingCollection';
-import { CONTRACT_AWAKENED, CONTRACT_TRUMPDTC, CONTRACT_WILDPASS, CONTRACT_SANDBOX, CONTRACT_TRUMPDTCS2 } from "../../../solContracts";
+import { CONTRACT_AWAKENED, CONTRACT_TRUMPDTC, CONTRACT_WILDPASS, CONTRACT_TEST, CONTRACT_TRUMPDTCS2 } from "../../../solContracts";
 
 export default function MpLandingPage() {
     return (
@@ -156,10 +156,12 @@ export default function MpLandingPage() {
                             contractAddress={CONTRACT_WILDPASS || 'defaultAddress'} 
                             collectionTitle="WildPass"
                         />
-                        <TrendingCollection 
-                            contractAddress={CONTRACT_SANDBOX || 'defaultAddress'} 
-                            collectionTitle="Sandbox"
-                        />
+                        <Link to={configs.appConfigs.path.COLLECTION_PREFIXT}>
+                            <TrendingCollection 
+                                contractAddress={CONTRACT_TEST || 'defaultAddress'} 
+                                collectionTitle="SimpleNFTCollection"
+                            />
+                        </Link>
                         <Link to={configs.appConfigs.path.COLLECTION_PREFIX2}>
                             <TrendingCollection 
                                 contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'} 

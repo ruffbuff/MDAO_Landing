@@ -25,17 +25,7 @@ const SocialLinks = styled.div`
 
 export default function LandingPage() {
     const [activeProfile, setActiveProfile] = useState<number | null>(null);
-    
-    const socialLinksStyle = {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: '10px',
-        opacity: 0,
-        transition: 'opacity 0.5s ease',
-    };
 
-    // Анимация появления иконок
     const hoverStyle = {
         opacity: 1,
     };
@@ -56,14 +46,6 @@ export default function LandingPage() {
             image: appConstants.Imgs.TEAM3,
             socialLinks: [
                 { icon: "x-twitter", url: "#twitter" },
-            ],
-        },
-        {
-            name: "Gazz",
-            role: "Web3 Manager",
-            image: appConstants.Imgs.TEAM4,
-            socialLinks: [
-                { icon: "x-twitter", url: "https://twitter.com/Web3_Connector" },
             ],
         },
         {

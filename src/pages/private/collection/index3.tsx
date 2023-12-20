@@ -10,7 +10,7 @@ import { P, Span } from "components/basic/text";
 import {
     CONTRACT_ADDRESS_2, CONTRACT_ABI_2,
     CONTRACT_AMBER, CONTRACT_AMBER_ABI,
-    CONTRACT_TRUMPDTC
+    CONTRACT_TEST
 } from "../../../solContracts";
 import { ethers } from 'ethers';
 import { useAddress } from "@thirdweb-dev/react";
@@ -27,7 +27,7 @@ interface NFT {
     media: { gateway: string }[];
     title: string;
 }
-export default function TrumpDTCPage() {
+export default function TestColPage() {
     const connectedAddress = useAddress();
     const navigate = useNavigate();
     const { setSelectedNft } = useNft();
@@ -59,10 +59,14 @@ export default function TrumpDTCPage() {
     );
 
     const isNftSelected = (nft: NFT) => selectedNfts.some(selectedNft => selectedNft.id === nft.id);
-    
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const amberContract = new ethers.Contract(CONTRACT_AMBER, CONTRACT_AMBER_ABI, provider.getSigner());
 
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    
+    // Use this signer for all contract interactions
+    const marketContract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, signer);
+    const amberContract = new ethers.Contract(CONTRACT_AMBER, CONTRACT_AMBER_ABI, signer);
+    
     const approveAMBER = async (amount: any) => {
         try {
             const transaction = await amberContract.approve(CONTRACT_ADDRESS_2, amount);
@@ -77,11 +81,9 @@ export default function TrumpDTCPage() {
     
     const fetchCollectionData = async () => {
         try {
-            const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
-            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider);
     
-            const collectionAddress = CONTRACT_TRUMPDTC;
-            const data = await contract.collectionsData(collectionAddress);
+            const collectionAddress = CONTRACT_TEST;
+            const data = await marketContract.collectionsData(collectionAddress);
             
             setCollectionStats({
                 totalListed: data.totalListed.toNumber(),
@@ -108,15 +110,13 @@ export default function TrumpDTCPage() {
         });
     };
 
-    const trumpDTCCollectionAddress = CONTRACT_TRUMPDTC; // Replace with actual collection address if different
+    const TestCollectionAddress = CONTRACT_TEST; // Replace with actual collection address if different
 
     // Modify fetchNFTs to filter NFTs by the collection address
     const fetchNFTs = useCallback(async () => {
         setIsLoading(true);
         try {
-            const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
-            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider);
-            const listings = await contract.getActiveListings();
+            const listings = await marketContract.getActiveListings();
 
             const requests = listings.map(async (listing: any) => {
                 const contractAddress = listing[2];
@@ -126,7 +126,7 @@ export default function TrumpDTCPage() {
                 const priceInEther = ethers.utils.formatEther(priceInWei);
                 const paymentType = listing[6] === 0 ? 'MATIC' : 'AMBER';
 
-                if (contractAddress.toLowerCase() === trumpDTCCollectionAddress.toLowerCase()) {
+                if (contractAddress.toLowerCase() === TestCollectionAddress.toLowerCase()) {
                     const url = `https://polygon-mainnet.g.alchemy.com/nft/v2/${apiKey}/getNFTMetadata?contractAddress=${contractAddress}&tokenId=${tokenId}`;
                     const response = await fetch(url, { headers: { accept: 'application/json' } });
                     const data = await response.json();
@@ -151,7 +151,7 @@ export default function TrumpDTCPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [trumpDTCCollectionAddress, apiKey]);
+    }, [TestCollectionAddress, apiKey]);
 
     useEffect(() => {
         fetchNFTs();
@@ -159,7 +159,7 @@ export default function TrumpDTCPage() {
 
     useEffect(() => {
         const fetchOwnersData = async () => {
-            const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${process.env.REACT_APP_ALCHEMY_API_KEY}/getOwnersForContract?contractAddress=${CONTRACT_TRUMPDTC}&withTokenBalances=true`;
+            const url = `https://polygon-mainnet.g.alchemy.com/nft/v3/${process.env.REACT_APP_ALCHEMY_API_KEY}/getOwnersForContract?contractAddress=${CONTRACT_TEST}&withTokenBalances=true`;
             try {
                 const response = await fetch(url, { headers: { accept: 'application/json' } });
                 const data = await response.json();
@@ -181,10 +181,7 @@ export default function TrumpDTCPage() {
 
     const handleBuy = async (selectedNft: NFT) => {
         if (!selectedNft) return;
-    
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const marketContract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider.getSigner());
-    
+        
         if (selectedNft.paymentType === 'AMBER') {
             const tokenAmount = ethers.utils.parseEther(selectedNft.price);
             await approveAMBER(tokenAmount);
@@ -207,6 +204,68 @@ export default function TrumpDTCPage() {
         }
     };
 
+    const handleBulkBuyWithMATIC = async () => {
+        if (selectedNfts.length === 0) {
+            alert('No NFTs selected');
+            return;
+        }
+
+        const totalMaticAmount = selectedNfts.reduce((acc, nft) => {
+            return acc.add(ethers.utils.parseEther(nft.price));
+        }, ethers.BigNumber.from(0));
+        
+        const listingIds = selectedNfts.map(nft => nft.listingId);
+    
+        try {
+            await marketContract.bulkBuyWithMATIC(listingIds, { value: totalMaticAmount });
+            console.log('Bulk MATIC purchase successful');
+        } catch (error) {
+            console.error('Error during bulk MATIC purchase:', error);
+        }
+    };
+    
+    const handleBulkBuyWithAMBER = async () => {
+        if (selectedNfts.length === 0) {
+            alert('No NFTs selected');
+            return;
+        }
+
+        const totalAmount = selectedNfts.reduce((acc, nft) => acc.add(ethers.utils.parseEther(nft.price)), ethers.BigNumber.from(0));
+        await approveAMBER(totalAmount);
+    
+        const listingIds = selectedNfts.map(nft => nft.listingId);
+        try {
+            await marketContract.bulkBuyWithAMBER(listingIds, totalAmount);
+            console.log('Bulk AMBER purchase successful');
+        } catch (error) {
+            console.error('Error during bulk AMBER purchase:', error);
+        }
+    };
+
+    const handleSweep = async () => {
+        if (selectedNfts.length === 0) {
+            alert('No NFTs selected');
+            return;
+        }
+
+
+        // Проверяем, что все выбранные NFT имеют одинаковый тип оплаты
+        const paymentType = selectedNfts[0].paymentType;
+        const allSamePaymentType = selectedNfts.every(nft => nft.paymentType === paymentType);
+    
+        if (!allSamePaymentType) {
+            alert('All selected NFTs must have the same payment type');
+            return;
+        }
+    
+        // Вызываем соответствующую функцию покупки в зависимости от типа оплаты
+        if (paymentType === 'AMBER') {
+            await handleBulkBuyWithAMBER();
+        } else if (paymentType === 'MATIC') {
+            await handleBulkBuyWithMATIC();
+        }
+    };
+
     const firstNFT = nftsList.length > 0 ? nftsList[0] : null;
 
     return (
@@ -218,7 +277,7 @@ export default function TrumpDTCPage() {
             zIndex: "1"
         }}>
             <Flex $style={{
-                background: `url(https://i.seadn.io/gcs/files/61a7eb876efd25dcfd8bbb52b84c6ba4.jpg?auto=format&dpr=1&w=3840)`,
+                background: `url(https://ipfs.io/ipfs/QmW55fwqJW6JgPs2BiSoZDcsJLfSCf91Vz8BhqYmDtU9my/pp.webp)`,
                 h: "32rem",
                 mb: "2rem",
                 w: "100%"
@@ -254,12 +313,12 @@ export default function TrumpDTCPage() {
                             p: ".5rem 1rem",
                             radius: "1rem"
                         }}>
-                        <Span>DIGITIAL COLLECTIBLES</Span>
+                        <Span>TESTER</Span>
                         </Flex>
                             {firstNFT && (
                                 <>
-                                    <Heading level={2}>Trump DTC Collection</Heading>
-                                    <a href="https://collecttrumpcards.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                    <Heading level={2}>Test Collection</Heading>
+                                    <a href="https://ipfs.io/ipfs/QmW55fwqJW6JgPs2BiSoZDcsJLfSCf91Vz8BhqYmDtU9my/pp.webp" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                         <Button $style={{
                                             bg: "white",
                                             color: "black",
@@ -294,7 +353,7 @@ export default function TrumpDTCPage() {
                     mb: "2rem"
                 }}>
                     <Image 
-                        src="https://i.seadn.io/gcs/files/f980181df268011a4491137fc71afdb5.jpg?auto=format&dpr=1&w=128" 
+                        src="https://ipfs.io/ipfs/QmW55fwqJW6JgPs2BiSoZDcsJLfSCf91Vz8BhqYmDtU9my/pp.webp" 
                         style={{ 
                             alignSelf: "start",
                             width: "100px",
@@ -397,31 +456,35 @@ export default function TrumpDTCPage() {
                         }
                     }
                 }}>
-                    <Button
-                        onClick={() => selectedNfts.length > 0 && handleBuy(selectedNfts[0])}
-                        $style={{
-                            bg: "#A259FF",
+                    {selectedNfts.length === 1 && (
+                        <Button
+                            onClick={() => handleBuy(selectedNfts[0])}
+                            $style={{
+                                bg: "#A259FF",
+                                kind: "radius"
+                            }}
+                        >
+                            <Flex $style={{
+                                gap: ".5rem"
+                            }}>
+                                <Icon icon={'buy'} />
+                                <Span>Buy</Span>
+                            </Flex>
+                        </Button>
+                    )}
+                    {selectedNfts.length > 1 && (
+                        <Button onClick={handleSweep} $style={{
+                            border: "1px solid #A259FF",
                             kind: "radius"
-                        }}
-                    >
-                        <Flex $style={{
-                            gap: ".5rem"
                         }}>
-                            <Icon icon={'buy'} />
-                            <Span>Buy</Span>
-                        </Flex>
-                    </Button>
-                    <Button $style={{
-                        border: "1px solid #A259FF",
-                        kind: "radius"
-                    }}>
-                        <Flex $style={{
-                            gap: ".5rem"
-                        }}>
-                            <Icon icon={'sweep'} />
-                            <Span>Sweep</Span>
-                        </Flex>
-                    </Button>
+                            <Flex $style={{
+                                gap: ".5rem"
+                            }}>
+                                <Icon icon={'sweep'} />
+                                <Span>Sweep</Span>
+                            </Flex>
+                        </Button>
+                    )}
                 </Flex>
             </Flex>
             <Grid $style={{
@@ -480,7 +543,7 @@ export default function TrumpDTCPage() {
                                             gap: "0.5rem"
                                         }}>
                                             <Image 
-                                                src="https://i.seadn.io/gcs/files/f980181df268011a4491137fc71afdb5.jpg?auto=format&dpr=1&w=128" 
+                                                src="https://ipfs.io/ipfs/QmW55fwqJW6JgPs2BiSoZDcsJLfSCf91Vz8BhqYmDtU9my/pp.webp" 
                                                 style={{ 
                                                     width: "30px",
                                                     height: "30px",
