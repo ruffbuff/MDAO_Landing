@@ -8,6 +8,7 @@ import { P, Span } from "components/basic/text";
 import appConstants from "constant";
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAddress } from "@thirdweb-dev/react";
 import { useNft } from "NftContext";
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS_2, CONTRACT_ABI_2 } from "../../../solContracts";
@@ -26,9 +27,31 @@ interface NftData {
     };
 }
 export default function DetailPage() {
+    const connectedAddress = useAddress();
+
     const { contractAddress, tokenId } = useParams();
     const { selectedNft } = useNft();
     const [nftData, setNftData] = useState<NftData | null>(null);
+
+    const isOwner = () => {
+        return selectedNft && selectedNft.seller === connectedAddress;
+    };
+
+    const handleCancelListing = async () => {
+        if (!selectedNft) return;
+    
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, signer);
+    
+            const transaction = await contract.cancelListing(selectedNft.listingId);
+            await transaction.wait();
+            console.log('Listing canceled successfully');
+        } catch (error) {
+            console.error('Error canceling listing:', error);
+        }
+    };
 
     const handleBuy = async () => {
         if (!selectedNft) return;
@@ -202,12 +225,28 @@ export default function DetailPage() {
                         }}
                     >
                         <Flex $style={{
-                            gap: ".5rem"
+                            gap: ".5rem",
                         }}>
                             <Icon icon={'buy'} />
                             <Span>Buy</Span>
                         </Flex>
                     </Button>
+                    {isOwner() && (
+                        <Button
+                            onClick={handleCancelListing}
+                            $style={{
+                                bg: "#FF4B4B",
+                                kind: "radius"
+                            }}
+                        >
+                            <Flex $style={{
+                                gap: ".5rem",
+                            }}>
+                                <Icon icon={'cancel'} />
+                                <Span>Cancel</Span>
+                            </Flex>
+                        </Button>
+                    )}
                 </Flex>
             </Flex>
         </Flex>

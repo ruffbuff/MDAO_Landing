@@ -59,9 +59,13 @@ export default function KabanaClubPage() {
     );
 
     const isNftSelected = (nft: NFT) => selectedNfts.some(selectedNft => selectedNft.id === nft.id);
-    
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const amberContract = new ethers.Contract(CONTRACT_AMBER, CONTRACT_AMBER_ABI, provider.getSigner());
+    const signer = provider.getSigner();
+    
+    // Use this signer for all contract interactions
+    const marketContract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, signer);
+    const amberContract = new ethers.Contract(CONTRACT_AMBER, CONTRACT_AMBER_ABI, signer);
 
     const approveAMBER = async (amount: any) => {
         try {
@@ -182,10 +186,7 @@ export default function KabanaClubPage() {
 
     const handleBuy = async (selectedNft: NFT) => {
         if (!selectedNft) return;
-    
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const marketContract = new ethers.Contract(CONTRACT_ADDRESS_2, CONTRACT_ABI_2, provider.getSigner());
-    
+        
         if (selectedNft.paymentType === 'AMBER') {
             const tokenAmount = ethers.utils.parseEther(selectedNft.price);
             await approveAMBER(tokenAmount);
@@ -206,7 +207,69 @@ export default function KabanaClubPage() {
                 console.error('MATIC purchase transaction failed:', error);
             }
         }
-    };    
+    };
+
+    const handleBulkBuyWithMATIC = async () => {
+        if (selectedNfts.length === 0) {
+            alert('No NFTs selected');
+            return;
+        }
+
+        const totalMaticAmount = selectedNfts.reduce((acc, nft) => {
+            return acc.add(ethers.utils.parseEther(nft.price));
+        }, ethers.BigNumber.from(0));
+        
+        const listingIds = selectedNfts.map(nft => nft.listingId);
+    
+        try {
+            await marketContract.bulkBuyWithMATIC(listingIds, { value: totalMaticAmount });
+            console.log('Bulk MATIC purchase successful');
+        } catch (error) {
+            console.error('Error during bulk MATIC purchase:', error);
+        }
+    };
+    
+    const handleBulkBuyWithAMBER = async () => {
+        if (selectedNfts.length === 0) {
+            alert('No NFTs selected');
+            return;
+        }
+
+        const totalAmount = selectedNfts.reduce((acc, nft) => acc.add(ethers.utils.parseEther(nft.price)), ethers.BigNumber.from(0));
+        await approveAMBER(totalAmount);
+    
+        const listingIds = selectedNfts.map(nft => nft.listingId);
+        try {
+            await marketContract.bulkBuyWithAMBER(listingIds, totalAmount);
+            console.log('Bulk AMBER purchase successful');
+        } catch (error) {
+            console.error('Error during bulk AMBER purchase:', error);
+        }
+    };
+
+    const handleSweep = async () => {
+        if (selectedNfts.length === 0) {
+            alert('No NFTs selected');
+            return;
+        }
+
+
+        // Проверяем, что все выбранные NFT имеют одинаковый тип оплаты
+        const paymentType = selectedNfts[0].paymentType;
+        const allSamePaymentType = selectedNfts.every(nft => nft.paymentType === paymentType);
+    
+        if (!allSamePaymentType) {
+            alert('All selected NFTs must have the same payment type');
+            return;
+        }
+    
+        // Вызываем соответствующую функцию покупки в зависимости от типа оплаты
+        if (paymentType === 'AMBER') {
+            await handleBulkBuyWithAMBER();
+        } else if (paymentType === 'MATIC') {
+            await handleBulkBuyWithMATIC();
+        }
+    };
 
     const firstNFT = nftsList.length > 0 ? nftsList[0] : null;
 
@@ -398,31 +461,35 @@ export default function KabanaClubPage() {
                         }
                     }
                 }}>
-                    <Button
-                        onClick={() => selectedNfts.length > 0 && handleBuy(selectedNfts[0])}
-                        $style={{
-                            bg: "#A259FF",
+                    {selectedNfts.length === 1 && (
+                        <Button
+                            onClick={() => handleBuy(selectedNfts[0])}
+                            $style={{
+                                bg: "#A259FF",
+                                kind: "radius"
+                            }}
+                        >
+                            <Flex $style={{
+                                gap: ".5rem"
+                            }}>
+                                <Icon icon={'buy'} />
+                                <Span>Buy</Span>
+                            </Flex>
+                        </Button>
+                    )}
+                    {selectedNfts.length > 1 && (
+                        <Button onClick={handleSweep} $style={{
+                            border: "1px solid #A259FF",
                             kind: "radius"
-                        }}
-                    >
-                        <Flex $style={{
-                            gap: ".5rem"
                         }}>
-                            <Icon icon={'buy'} />
-                            <Span>Buy</Span>
-                        </Flex>
-                    </Button>
-                    <Button $style={{
-                        border: "1px solid #A259FF",
-                        kind: "radius"
-                    }}>
-                        <Flex $style={{
-                            gap: ".5rem"
-                        }}>
-                            <Icon icon={'sweep'} />
-                            <Span>Sweep</Span>
-                        </Flex>
-                    </Button>
+                            <Flex $style={{
+                                gap: ".5rem"
+                            }}>
+                                <Icon icon={'sweep'} />
+                                <Span>Sweep</Span>
+                            </Flex>
+                        </Button>
+                    )}
                 </Flex>
             </Flex>
             <Grid $style={{

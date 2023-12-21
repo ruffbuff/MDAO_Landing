@@ -8,7 +8,7 @@ import Image from "components/basic/image";
 import { Span } from "components/basic/text";
 import appConstants from "constant";
 import { TabContent, TabHeader, TabList } from "components/basic/tab";
-import React, { ChangeEvent, useState, useEffect, useMemo } from "react";
+import { ChangeEvent, useState, useEffect, useMemo } from "react";
 import { useAddress } from "@thirdweb-dev/react";
 import { ethers } from 'ethers';
 import Modal from '@mui/material/Modal';
@@ -300,7 +300,6 @@ export default function ProfilePage() {
             const signer = provider.getSigner();
             const nftContract = new ethers.Contract(nftAddress, CONTRACT_ABI_AWAKENED, signer);
     
-            // Check if the token is already approved for the marketplace contract
             const approvedAddress = await nftContract.getApproved(tokenId);
             if (approvedAddress !== CONTRACT_ADDRESS_2) {
                 let approveTransaction = await nftContract.approve(CONTRACT_ADDRESS_2, tokenId);
@@ -310,12 +309,9 @@ export default function ProfilePage() {
                 console.log(`Token ID ${tokenId} is already approved for the marketplace`);
             }
     
-            // Call listNFT with the correct price in Wei after approval
             await listNFT(nftAddress, tokenId, priceInWei, listingType);
         } catch (error) {
             console.error(`Error approving NFT for listing:`, error);
-        } finally {
-            setIsListing(false);
         }
     };
 
@@ -337,7 +333,7 @@ export default function ProfilePage() {
     const listNFT = async (
         nftAddress: string, 
         tokenId: string, 
-        price: string, 
+        price: string,
         listingType: 'AMBER' | 'MATIC'
     ): Promise<void> => {
         setIsListing(true);
@@ -363,23 +359,38 @@ export default function ProfilePage() {
     
             const transactionOptions = { value: commission };
     
+            const priceInWei = ethers.utils.parseUnits(price, 'ether');
+
+            let transaction;
             if (listingType === 'AMBER') {
-                const transaction = await contract.listForAMBER(nftAddress, tokenId, ethers.utils.parseUnits(price, 'ether'), transactionOptions);
-                const receipt = await transaction.wait();
-                console.log('AMBER Transaction successful:', receipt);
+                transaction = await contract.listForAMBER(nftAddress, tokenId, priceInWei, transactionOptions);
             } else {
-                const transaction = await contract.listForMATIC(nftAddress, tokenId, ethers.utils.parseUnits(price, 'ether'), transactionOptions);
-                const receipt = await transaction.wait();
-                console.log('MATIC Transaction successful:', receipt);
+                transaction = await contract.listForMATIC(nftAddress, tokenId, priceInWei, transactionOptions);
             }
     
+            let receipt;
+            for (let i = 0; i < 3; i++) {
+                try {
+                    receipt = await transaction.wait();
+                    break; // Выход из цикла, если успешно
+                } catch (error) {
+                    if (i < 2) {
+                        // Ждем перед следующей попыткой
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    } else {
+                        throw error; // Переброс ошибки после последней попытки
+                    }
+                }
+            }
+    
+            console.log(`${listingType} Transaction successful:`, receipt);
             setOpen(false);
         } catch (error) {
             console.error(`Error listing NFT for ${listingType}:`, error);
         } finally {
             setIsListing(false);
         }
-    };      
+    };    
     
     const handleListNFT = () => {
         if (!selectedNft) {
@@ -388,23 +399,24 @@ export default function ProfilePage() {
         }
         setOpen(true);
     };
-
+    
     const handleSubmitListing = async () => {
         if (!selectedNft) {
             alert('Please select an NFT to list.');
             return;
         }
     
-        let priceInWei;
-        if (listingType === 'AMBER') {
-            priceInWei = ethers.utils.parseUnits(price || '0', 'ether').toString();
-        } else {
-            priceInWei = price || '0';
+        const numericPrice = parseFloat(price);
+        if (isNaN(numericPrice)) {
+            alert('Please enter a valid number for the price.');
+            return;
         }
     
-        await approveNFT(selectedNft.contract.address || '', selectedNft.tokenId || '', priceInWei, listingType);
-    };
+        const priceInEther = numericPrice.toString();
     
+        await approveNFT(selectedNft.contract.address || '', selectedNft.tokenId || '', priceInEther, listingType);
+    };
+        
     useEffect(() => {
         if (address) {
             const options = { method: 'GET', headers: { accept: 'application/json' } };
