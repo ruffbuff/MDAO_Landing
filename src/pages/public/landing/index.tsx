@@ -247,6 +247,7 @@ export default function LandingPage() {
             }}>
                 <Flex id="about" $style={{
                     gap: "1rem",
+                    fWrap:'wrap'
                 }}>
                     <Heading level={2}>About </Heading>
                     <Heading gradient level={2}>MustacheDAO</Heading>
@@ -420,30 +421,31 @@ export default function LandingPage() {
                     }
                 }}>
                     {teamMembers.map((member, index) => (
-                    <Flex
-                        key={index}
-                        onMouseEnter={() => setActiveProfile(index)}
-                        onMouseLeave={() => setActiveProfile(null)}
-                        $style={{
-                        fDirection: "column",
-                        background: "rgba(16, 16, 16, 0.20)",
-                        radius: "25px",
-                        }}
-                    >
-                        <Image src={member.image} />
-                        <Flex $style={{ fDirection: "column", p: "1rem" }}>
-                        <Heading level={4}>{member.name}</Heading>
-                        <Heading gradient level={5}>{member.role}</Heading>
-                        </Flex>
+                        <Flex
+                            key={index}
+                            onMouseEnter={() => setActiveProfile(index)}
+                            onMouseLeave={() => setActiveProfile(null)}
+                            $style={{
+                                fDirection: "column",
+                                background: "rgba(16, 16, 16, 0.20)",
+                                radius: "25px",
+                                overflow: "hidden"
+                            }}
+                        >
+                            <Image src={member.image} />
+                            <Flex $style={{ fDirection: "column", p: "1rem" }}>
+                                <Heading level={4}>{member.name}</Heading>
+                                <Heading gradient level={5}>{member.role}</Heading>
+                            </Flex>
 
-                        <SocialLinks style={{ ...(activeProfile === index ? hoverStyle : { opacity: 0 }) }}>
-                        {member.socialLinks.map((link, linkIndex) => (
-                            <a key={linkIndex} href={link.url} style={{ margin: '0 5px' }}>
-                            <Icon icon={link.icon} />
-                            </a>
-                        ))}
-                        </SocialLinks>
-                    </Flex>
+                            <SocialLinks style={{ ...(activeProfile === index ? hoverStyle : { opacity: 0 }) }}>
+                                {member.socialLinks.map((link, linkIndex) => (
+                                    <a key={linkIndex} href={link.url} style={{ margin: '0 5px' }}>
+                                        <Icon icon={link.icon} />
+                                    </a>
+                                ))}
+                            </SocialLinks>
+                        </Flex>
                     ))}
                 </Grid>
             </Flex>

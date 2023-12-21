@@ -21,7 +21,7 @@ export default function MpLandingPage() {
         <Flex $style={{
             fDirection: "column",
             w: "100%",
-            vAlign:"center",
+            vAlign: "center",
             position: "relative",
             zIndex: "1"
         }}>
@@ -29,20 +29,21 @@ export default function MpLandingPage() {
                 background: `url(${appConstants.Imgs.BG2})`,
                 h: "50rem",
                 mb: "10rem",
-                w:"100%"
+                w: "100%"
             }}>
                 <Flex $style={{
                     background: "linear-gradient(180deg, rgba(162, 89, 255, 0.00) 0%, #232323 100%);",
                     h: "100%",
                     w: "100%",
-                    hAlign:"center"
+                    hAlign: "center",
+                    p: '1rem'
                 }}>
                     <Flex $style={{
                         vAlign: "flex-end",
                         hAlign: "space-between",
                         w: "100%",
                         p: "3rem 0",
-                        maxW:"1440px",
+                        maxW: "1440px",
                         queries: {
                             620: {
                                 fDirection: "column",
@@ -77,10 +78,11 @@ export default function MpLandingPage() {
                 </Flex>
             </Flex>
             <Flex $style={{
-                fDirection:"column",
-                maxW:"1440px",
-                w:"100%",
-                mb:"6rem"
+                fDirection: "column",
+                maxW: "1440px",
+                w: "100%",
+                mb: "6rem",
+                p: "1rem"
             }}>
                 <Flex $style={{
                     fDirection: "column",
@@ -98,23 +100,24 @@ export default function MpLandingPage() {
                 <Flex $style={{
                     overflow: "auto"
                 }}>
-                <Table>
-                    <Tr>
-                        <Th>Collection</Th>
-                        <Th>Supply</Th>
-                        <Th>NFTs Sold</Th>
-                        <Th>Floor Price</Th>
-                        <Th>Volume</Th>
-                    </Tr>
-                    <NFTCollectionFetcher />
+                    <Table>
+                        <Tr>
+                            <Th>Collection</Th>
+                            <Th>Supply</Th>
+                            <Th>NFTs Sold</Th>
+                            <Th>Floor Price</Th>
+                            <Th>Volume</Th>
+                        </Tr>
+                        <NFTCollectionFetcher />
                     </Table>
                 </Flex>
             </Flex>
             <Flex $style={{
                 gap: "2rem",
                 fDirection: "column",
-                mb: "2rem",
-                maxW:"1440px"
+                mb: "6rem",
+                maxW: "1440px",
+                p: "1rem",
             }}>
                 <Flex $style={{
                     fDirection: "column",
@@ -124,65 +127,56 @@ export default function MpLandingPage() {
                     <P>Checkout our weekly updated trending collection.</P>
                 </Flex>
                 <Grid $style={{
-                    columns: "1",
-                    fWrap: "wrap",
-                    gap: "6rem",
+                    columns: "5",
+                    w: "100%",
+                    gap: "2rem",
                     $queries: {
                         1240: {
                             columns: "4"
                         },
-                        968: {
+                        920: {
                             columns: "3"
                         },
-                        720: {
-                            columns: "2"
-                        },
                         480: {
-                            columns: "1"
+                            columns: "2"
                         }
                     }
                 }}>
-                    <Flex $style={{
-                        gap: "2rem",
-                        fDirection: "row",
-                        mb: "2rem",
-                        maxW: "1440px"
-                    }}>
-                        <TrendingCollection 
-                            contractAddress={CONTRACT_TRUMPDTC || 'defaultAddress'} 
-                            collectionTitle="Trump DTC Collection"
+                    <TrendingCollection
+                        contractAddress={CONTRACT_TRUMPDTC || 'defaultAddress'}
+                        collectionTitle="Trump DTC Collection"
+                    />
+                    <TrendingCollection
+                        contractAddress={CONTRACT_WILDPASS || 'defaultAddress'}
+                        collectionTitle="WildPass"
+                    />
+                    <Link to={configs.appConfigs.path.COLLECTION_PREFIXT}>
+                        <TrendingCollection
+                            contractAddress={CONTRACT_TEST || 'defaultAddress'}
+                            collectionTitle="Simple NFT Collection"
                         />
-                        <TrendingCollection 
-                            contractAddress={CONTRACT_WILDPASS || 'defaultAddress'} 
-                            collectionTitle="WildPass"
+                    </Link>
+                    <Link to={configs.appConfigs.path.COLLECTION_PREFIX2}>
+                        <TrendingCollection
+                            contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'}
+                            collectionTitle="Trump DTC Collection S2"
                         />
-                        <Link to={configs.appConfigs.path.COLLECTION_PREFIXT}>
-                            <TrendingCollection 
-                                contractAddress={CONTRACT_TEST || 'defaultAddress'} 
-                                collectionTitle="SimpleNFTCollection"
-                            />
-                        </Link>
-                        <Link to={configs.appConfigs.path.COLLECTION_PREFIX2}>
-                            <TrendingCollection 
-                                contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'} 
-                                collectionTitle="Trump DTC Collection S2"
-                            />
-                        </Link>
-                        <Link to={configs.appConfigs.path.COLLECTION_PREFIX}>
-                            <TrendingCollection 
-                                contractAddress={CONTRACT_AWAKENED || 'defaultAddress'} 
-                                collectionTitle="Awakened Mushrooms"
-                            />
-                        </Link>
-                    </Flex>
+                    </Link>
+                    <Link to={configs.appConfigs.path.COLLECTION_PREFIX}>
+                        <TrendingCollection
+                            contractAddress={CONTRACT_AWAKENED || 'defaultAddress'}
+                            collectionTitle="Awakened Mushrooms"
+                        />
+                    </Link>
                 </Grid>
             </Flex>
             <Flex $style={{
                 fDirection: "column",
                 gap: "2rem",
                 mb: "5rem",
-                w:"100%",
-                maxW:"1440px"
+                w: "100%",
+                maxW: "1440px",
+                p: "1rem"
             }}>
                 <Flex $style={{
                     fDirection: "column"
@@ -193,12 +187,12 @@ export default function MpLandingPage() {
                 <Grid $style={{
                     columns: "3",
                     gap: "2rem",
-                    $queries:{
-                        980:{
-                            columns:"2"
+                    $queries: {
+                        980: {
+                            columns: "2"
                         },
-                        680:{
-                            columns:"1"
+                        680: {
+                            columns: "1"
                         }
                     }
                 }}>
@@ -271,51 +265,73 @@ export default function MpLandingPage() {
                 </Grid>
             </Flex>
             <Flex $style={{
-                background: "rgba(16,16,16,.2)",
-                vAlign: "center",
-                gap: "3rem",
-                radius: "2rem",
-                mb: "5rem",
-                w:"100%",
-                maxW:"1440px"
+                p: "1rem",
+                w: "100%",
+                hAlign: "center"
             }}>
                 <Flex $style={{
-                    queries:{
-                        880:{
-                            display:"none"
-                        }
-                    }
-                }}>
-                <Image src={appConstants.Imgs.BG3} />
-                </Flex>
-                <Flex $style={{
-                    fDirection: "column",
-                    gap: "1rem",
-                    queries:{
-                        880:{
-                            p:"2rem"
-                        }
-                    }
+                    background: "rgba(16,16,16,.2)",
+                    vAlign: "center",
+                    gap: "3rem",
+                    radius: "2rem",
+                    mb: "5rem",
+                    w: "100%",
+                    maxW: "1440px",
+                    p: "1rem"
                 }}>
                     <Flex $style={{
-                        fDirection: "column",
-                        gap: ".5rem"
+                        queries: {
+                            880: {
+                                display: "none"
+                            }
+                        }
                     }}>
-                        <Heading level={3}>Join Our Weekly Digest</Heading>
-                        <P>Get exclusive promotions & updates straight to your mail.</P>
+                        <Image src={appConstants.Imgs.BG3} />
                     </Flex>
                     <Flex $style={{
-                        gap: "1rem"
+                        fDirection: "column",
+                        gap: "1rem",
+                        queries: {
+                            880: {
+                                p: "2rem"
+                            }
+                        }
                     }}>
-                        <Input $style={{
-                            bg: "black"
-                        }} placeholder="Enter your email here" />
-                        <Button disabled $style={{
-                            bg: "gray",
-                            kind: "radius"
+                        <Flex $style={{
+                            fDirection: "column",
+                            gap: ".5rem"
                         }}>
-                            Subscribe
-                        </Button>
+                            <Heading level={3}>Join Our Weekly Digest</Heading>
+                            <P>Get exclusive promotions & updates straight to your mail.</P>
+                        </Flex>
+                        <Flex $style={{
+                            gap: "1rem",
+                            w: "100%",
+                            queries: {
+                                480: {
+                                    fWrap: "wrap"
+                                }
+                            }
+                        }}>
+                            <Input $style={{
+                                bg: "black"
+                            }} placeholder="Enter your email here" />
+                            <Flex $style={{
+                                queries: {
+                                    480: {
+                                        w: "100%"
+                                    }
+                                }
+                            }}>
+                                <Button disabled $style={{
+                                    bg: "gray",
+                                    kind: "radius",
+                                    w: "100%"
+                                }}>
+                                    Subscribe
+                                </Button>
+                            </Flex>
+                        </Flex>
                     </Flex>
                 </Flex>
             </Flex>

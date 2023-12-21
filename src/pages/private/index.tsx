@@ -5,6 +5,7 @@ import Flex from "components/basic/flex";
 import Image from "components/basic/image";
 import appConstants from "constant";
 import { useSelector } from "react-redux";
+import AppSidebar from "components/sidebar/app";
 export default function PrivatePages() {
 
     const mode = useSelector((state: any) => state.app.mode);
@@ -13,12 +14,12 @@ export default function PrivatePages() {
         <Flex $style={{
             fDirection: "column",
             overflow: "hidden",
-            position: "relative"
+            position: "relative",
         }}>
+            <AppSidebar/>
             <MarketHeader />
             <Outlet />
             <MarketFooter />
-
             {
                 !mode &&
                 <>

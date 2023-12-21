@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    mode: true
+    mode: true,
+    sidebar: false,
 };
 
 const appSlice = createSlice({
@@ -10,6 +11,9 @@ const appSlice = createSlice({
     reducers: {
         toggleMode: (state:any) => {
             state.mode = !state.mode;
+        },
+        toggleMenu: (state:any) => {
+            state.sidebar = !state.sidebar;
         }
     }
 });

@@ -457,7 +457,7 @@ export default function ProfilePage() {
                 <Flex $style={{
                     background: "linear-gradient(180deg, rgba(162, 89, 255, 0.00) 0%, #232323 100%);",
                     w: "100%",
-                    position: "relative"
+                    position: "relative",
                 }}>
                     <Flex $style={{
                         w: "100%",
@@ -467,7 +467,7 @@ export default function ProfilePage() {
                             w: "100%",
                             maxW: "1440px",
                             transform: "translateY(50%)",
-                            p: "2rem 0rem 2rem 0rem",
+                            p: "2rem 1rem 2rem 1rem",
                             queries: {
                                 480: {
                                     p: "2rem"
@@ -483,7 +483,7 @@ export default function ProfilePage() {
             </Flex>
             <Flex $style={{
                 fDirection: "column",
-                p: "2.5rem 0 0 0",
+                p: "2.5rem 1rem 0 1rem",
                 vAlign: "center",
                 w: "100%"
             }}>
@@ -670,7 +670,7 @@ export default function ProfilePage() {
             <Grid $style={{
                 columns: "5",
                 gap: "2rem",
-                p: "0rem 0rem 5rem 0rem",
+                p: "0rem 1rem 5rem 1rem",
                 maxW: "1440px",
                 w: "100%",
             }}>

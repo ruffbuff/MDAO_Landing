@@ -1,7 +1,7 @@
 import Flex from "components/basic/flex";
 import Icon from "components/basic/icon";
 import { Span } from "components/basic/text";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Heading from "components/basic/heading";
 import Link from "components/basic/link";
 import configs from "configs";
@@ -14,6 +14,10 @@ import './MarketHeader.css';
 function MarketHeader() {
     const [isDark, setIsDark] = useState(false);
     const dispatch = useDispatch();
+
+    const handleClose = async () => {
+        dispatch(appActions.toggleMenu());
+    };
 
     useEffect(() => {
         const setDarkMode = () => {
@@ -61,15 +65,16 @@ function MarketHeader() {
                     <Link to="/"><Heading level={3}>MustacheDAO</Heading></Link>
                 </Flex>
                 <Flex $style={{
-                    gap:"2rem"
+                    gap:"2rem",
+                    queries: {
+                        860: {
+                            display: 'none'
+                        }
+                    }
                 }}>
                     <Flex as="ul" $style={{
                         gap: "2rem",
-                        queries: {
-                            860: {
-                                display: 'none'
-                            }
-                        }
+
                     }}>
                         <Flex as="ul" $style={{ gap: "2rem" }}>
                             <Link to={configs.appConfigs.path.PUBLIC_PREFIX}><Span>Home</Span></Link>
@@ -116,6 +121,16 @@ function MarketHeader() {
                             welcomeScreen={{ title: "Welcome" }}
                         />
                     </Flex>
+                </Flex>
+                <Flex onClick={handleClose} $style={{
+                    display:"none",
+                    queries:{
+                        860:{
+                            display:"flex"
+                        }
+                    }
+                }}>
+                    <Icon icon={'menu'} />
                 </Flex>
             </Flex>
         </Flex>

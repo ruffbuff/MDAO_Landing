@@ -65,7 +65,7 @@ const TrendingCollection: React.FC<TrendingCollectionProps> = ({ contractAddress
     }, [fetchedData, collectionTitle]);
 
     return (
-        <Flex $style={{ gap: "2rem", fDirection: "column", mb: "6rem", maxW: "1440px" }}>
+        <Flex $style={{ gap: "2rem", fDirection: "column" }}>
             <Flex $style={{ fDirection: "column", gap: "1rem", maxW: "20rem" }}>
                 {nftImages.length > 0 && <Image $style={{ radius: "1.5rem" }} src={nftImages[0]} />}
                 <Grid $style={{ columns: "3", gap: "1rem" }}>
