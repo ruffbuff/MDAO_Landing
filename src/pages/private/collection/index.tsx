@@ -397,13 +397,6 @@ export default function KabanaClubPage() {
                         fDirection: "column",
                         gap: ".5rem"
                     }}>
-                        <Heading level={4}>{collectionStats.floorPriceEth} MATIC</Heading>
-                        <Span>Floor price</Span>
-                    </Flex>
-                    <Flex $style={{
-                        fDirection: "column",
-                        gap: ".5rem"
-                    }}>
                         <Heading level={4}>{collectionStats.totalSold}</Heading>
                         <Span>Total Sold</Span>
                     </Flex>
