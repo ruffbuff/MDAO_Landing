@@ -143,10 +143,6 @@ export default function MpLandingPage() {
                     }
                 }}>
                     <TrendingCollection
-                        contractAddress={CONTRACT_TRUMPDTC || 'defaultAddress'}
-                        collectionTitle="Trump DTC Collection"
-                    />
-                    <TrendingCollection
                         contractAddress={CONTRACT_WILDPASS || 'defaultAddress'}
                         collectionTitle="WildPass"
                     />
@@ -154,12 +150,6 @@ export default function MpLandingPage() {
                         <TrendingCollection
                             contractAddress={CONTRACT_TEST || 'defaultAddress'}
                             collectionTitle="Simple NFT Collection"
-                        />
-                    </Link>
-                    <Link to={configs.appConfigs.path.COLLECTION_PREFIX2}>
-                        <TrendingCollection
-                            contractAddress={CONTRACT_TRUMPDTCS2 || 'defaultAddress'}
-                            collectionTitle="Trump DTC Collection S2"
                         />
                     </Link>
                     <Link to={configs.appConfigs.path.COLLECTION_PREFIX}>
