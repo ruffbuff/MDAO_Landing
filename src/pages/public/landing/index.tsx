@@ -173,13 +173,7 @@ export default function LandingPage() {
             title: "Milestone 3",
             cardTitle: "WEB3 Messanger | Friends Airdrop | NFT BIds | W2W (Wallet to Wallet)",
             cardSubtitle: "",
-            cardDetailedText: "New project tools.",
-            media: {
-                type: "IMAGE",
-                source: {
-                    url: appConstants.Imgs.TEST
-                }
-            }
+            cardDetailedText: "New project tools."
         },
     ];
 
