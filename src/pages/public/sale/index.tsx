@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 
 const SalePage = () => {
   const [amount, setAmount] = useState(1);
+  const [totalNFTs, setTotalNFTs] = useState<number | null>(null);
 
   const mintNFT = async (amount: any) => {
     try {
@@ -44,6 +45,22 @@ const SalePage = () => {
       console.error("Error minting NFT:", error);
     }
   };
+
+  useEffect(() => {
+    const getTotalSupply = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const contract = new ethers.Contract(CONTRACT_WHALE, CONTRACT_WHALE_ABI, provider);
+
+        const supply = await contract.totalSupply();
+        setTotalNFTs(supply.toNumber());
+      } catch (error) {
+        console.error("Error fetching total supply:", error);
+      }
+    };
+
+    getTotalSupply();
+  }, []);
   
   return (
   <>
@@ -89,6 +106,7 @@ const SalePage = () => {
         <Button $style={{ border: "1px solid white", kind: "radius" }} onClick={() => mintNFT(amount)}>
           Mint NFT
         </Button>
+        {totalNFTs !== null && <div>Total NFTs Minted: {totalNFTs}</div>}
       </Flex>
       <Footer />
     </Flex>
