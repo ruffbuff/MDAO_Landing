@@ -14,7 +14,7 @@ import Icon from "components/basic/icon"
 import configs from "configs";
 import NFTCollectionFetcher from './NFTCollectionFetcher';
 import TrendingCollection from './TrendingCollection';
-import { CONTRACT_AWAKENED, CONTRACT_TRUMPDTC, CONTRACT_WILDPASS, CONTRACT_TEST, CONTRACT_TRUMPDTCS2 } from "../../../solContracts";
+import { CONTRACT_AWAKENED, CONTRACT_WILDPASS, CONTRACT_TEST } from "../../../solContracts";
 
 export default function MpLandingPage() {
     return (

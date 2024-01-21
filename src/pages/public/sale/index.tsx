@@ -1,3 +1,5 @@
+// src/pages/public/sale/index.tsx
+
 import { ethers } from 'ethers';
 import SaleHeader from "components/header/SaleHeader";
 import Button from "components/basic/button";
@@ -7,32 +9,15 @@ import Image from "components/basic/image";
 import { Span } from "components/basic/text";
 import appConstants from "constant";
 import Footer from "components/footer";
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../../../solContracts";
-import React, { useEffect, useState } from 'react';
+import {
+  CONTRACT_WHALE, CONTRACT_WHALE_ABI
+} from "../../../solContracts";
+import { useEffect, useState } from 'react';
 
 const SalePage = () => {
-  const [totalSpots, setTotalSpots] = useState(0);
+  const [amount, setAmount] = useState(1);
 
-  useEffect(() => {
-    getTotalSpots();
-  }, []);
-
-  const getTotalSpots = async () => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-
-      const presaleId = 4;
-      const buyers = await contract.getPresaleBuyers(presaleId);
-
-      const total = buyers.reduce((sum: number, buyer: any) => sum + buyer.spotsBought.toNumber(), 0);
-      setTotalSpots(total);
-    } catch (error) {
-      console.error('Error fetching total spots:', error);
-    }
-  };
-
-  const joinPreSale = async () => {
+  const mintNFT = async (amount: any) => {
     try {
       if (window.ethereum) {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -40,29 +25,34 @@ const SalePage = () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        const contract = new ethers.Contract(CONTRACT_WHALE, CONTRACT_WHALE_ABI, signer);
+        const userAddress = await signer.getAddress();
 
-        const presaleId = 4;
-        const transaction = await contract.buyPlaceInPresale(presaleId, { value: ethers.utils.parseEther("25") });
+        const ownerAddress = await contract.owner();
+        const isUserOwner = userAddress.toLowerCase() === ownerAddress.toLowerCase();
 
+        const mintPrice = await contract.mintPrice();
+        const totalCost = isUserOwner ? ethers.constants.Zero : mintPrice.mul(ethers.BigNumber.from(amount));
+  
+        const transaction = await contract.mint(amount, { value: totalCost });
         await transaction.wait();
-
-        alert("Successfully joined the pre-sale!");
+      
       } else {
         console.error("Ethereum object not found, you need to install MetaMask!");
       }
     } catch (error) {
-      console.error("Error joining pre-sale:", error);
+      console.error("Error minting NFT:", error);
     }
   };
-
+  
   return (
+  <>
     <Flex $style={{
       fDirection: "column",
       minH: "100vh",
       vAlign: "center",
-      position:"relative",
-      zIndex:"1"
+      position: "relative",
+      zIndex: "1"
     }}>
       <SaleHeader />
       <Flex $style={{
@@ -73,31 +63,36 @@ const SalePage = () => {
         flex: "1",
         p: "2rem"
       }}>
-        <Heading gradient level={3}>The Second WLS Pre-sale Phase</Heading>
+        <Heading gradient level={3}>MUstacheDAO: Public NFT Minting</Heading>
         <Image 
-          src={appConstants.Imgs.TEST1} 
+          src={appConstants.Imgs.TEST1}
           $style={{ maxW: "380px", radius: "32px" }}
-          alt="Whale" 
+          alt="NFT Example" 
         />
         <Span $style={{ fontWeight: 'normal', size: '22px' }}>
-            The spot price will be 25 $MATIC per spot.
-            <br/>Each spot will be equivalent to 1 NFT.
-            <br/>Special Bonus:
-            <br/>Purchase 3 spots to receive 4 NFTs, or 5 spots for 7 NFTs.
+          Mint your unique NFT for just 25 $MATIC each.
+          <br/>Every NFT is a unique piece of digital art.
+          <br/>Special Offer:
+          <br/>Mint 3 NFTs to receive a special edition "Potion NFT", exclusive to early minters.
         </Span>
         <Heading level={5}>
-            After reaching our minimum progress target,
-            <br/>we will transition to the public minting phase.
-            <br/>This period will also allow us to finalize our MustachePlace Martketplace,
-            <br/>and will prepare for an big event which will be connected with NFT Whales!
+          Join the exciting world of NFTs with our MustacheDAO collection.
+          <br/>Be part of our growing community and explore the potential of digital art ownership.
         </Heading>
-        <Span>{`Total spots sold: ${totalSpots}`}</Span>
-        <Button $style={{ border: "1px solid white", kind: "radius" }} onClick={joinPreSale}>
-          Join Pre-Sale
+        <input 
+          type="number" 
+          value={amount} 
+          onChange={(e) => setAmount(Number(e.target.value))} 
+          min="1"
+          style={{ backgroundColor: "black" }}
+        />
+        <Button $style={{ border: "1px solid white", kind: "radius" }} onClick={() => mintNFT(amount)}>
+          Mint NFT
         </Button>
       </Flex>
       <Footer />
     </Flex>
+  </>
   );
 };
 
