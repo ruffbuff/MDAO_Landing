@@ -14,7 +14,7 @@ import Icon from "components/basic/icon"
 import configs from "configs";
 import NFTCollectionFetcher from './NFTCollectionFetcher';
 import TrendingCollection from './TrendingCollection';
-import { CONTRACT_AWAKENED, CONTRACT_WILDPASS, CONTRACT_TEST } from "../../../solContracts";
+import { CONTRACT_AWAKENED } from "../../../solContracts";
 
 export default function MpLandingPage() {
     return (
@@ -142,16 +142,6 @@ export default function MpLandingPage() {
                         }
                     }
                 }}>
-                    <TrendingCollection
-                        contractAddress={CONTRACT_WILDPASS || 'defaultAddress'}
-                        collectionTitle="WildPass"
-                    />
-                    <Link to={configs.appConfigs.path.COLLECTION_PREFIXT}>
-                        <TrendingCollection
-                            contractAddress={CONTRACT_TEST || 'defaultAddress'}
-                            collectionTitle="Simple NFT Collection"
-                        />
-                    </Link>
                     <Link to={configs.appConfigs.path.COLLECTION_PREFIX}>
                         <TrendingCollection
                             contractAddress={CONTRACT_AWAKENED || 'defaultAddress'}
