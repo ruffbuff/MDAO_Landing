@@ -6,6 +6,9 @@ import TEAM4 from 'assets/imgs/team-4.png';
 import TEAM5 from 'assets/imgs/team-5.png';
 import TEAM6 from 'assets/imgs/team-6.png';
 import TEST1 from 'assets/imgs/1.png';
+import TEST2 from 'assets/imgs/7.png';
+import TEST3 from 'assets/imgs/8.png';
+import TEST4 from 'assets/imgs/9.png';
 
 import BG2 from 'assets/imgs/bg-2.png';
 import BG3 from 'assets/imgs/bg-3.png';
@@ -36,6 +39,9 @@ const Imgs = {
     TEAM5,
     TEAM6,
     TEST1,
+    TEST2,
+    TEST3,
+    TEST4,
     Avatar6,
     Avatar7,
     Avatar8,

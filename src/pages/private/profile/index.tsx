@@ -541,7 +541,7 @@ export default function ProfilePage() {
                             );
                             })}
                         </Flex>
-                            <Heading gradient level={3}>{address ? shortenAddress(address) : 'Err'}</Heading>
+                            <Heading gradient level={3}>{address ? shortenAddress(address) : 'Connect Wallet'}</Heading>
                             <Flex $style={{
                                 fDirection: "column"
                             }}>

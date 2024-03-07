@@ -1,7 +1,7 @@
 // src/pages/private/mutate/index.tsx
 
 import { ethers } from 'ethers';
-import MarketHeader from "components/header/MarketHeader";
+import SaleHeader from "components/header/SaleHeader";
 import Footer from "components/footer";
 import Flex from "components/basic/flex";
 import Heading from "components/basic/heading";
@@ -49,7 +49,7 @@ const MutatePage = () => {
       position: "relative",
       zIndex: "1"
     }}>
-      <MarketHeader />
+      <SaleHeader />
       <Flex $style={{
         fDirection: "column",
         gap: "2rem",
@@ -58,7 +58,7 @@ const MutatePage = () => {
         flex: "1",
         p: "2rem"
       }}>
-        <Heading gradient level={3}>Mutate Your Whale NFT</Heading>
+        <Heading gradient level={3}>Mutate Your NFT WHales!</Heading>
         <Flex $style={{
           fDirection: "row",
           justifyContent: "center",
@@ -67,17 +67,17 @@ const MutatePage = () => {
           fWrap: "wrap"
         }}>
           <Image 
-            src={appConstants.Imgs.TEST1}
+            src={appConstants.Imgs.TEST4}
             $style={{ maxW: "380px", radius: "32px" }}
             alt="NFT Example Left" 
           />
           <Image 
-            src={appConstants.Imgs.TEST1}
+            src={appConstants.Imgs.TEST3}
             $style={{ maxW: "380px", radius: "32px" }}
             alt="NFT Example Center" 
           />
           <Image 
-            src={appConstants.Imgs.TEST1}
+            src={appConstants.Imgs.TEST2}
             $style={{ maxW: "380px", radius: "32px" }}
             alt="NFT Example Right" 
           />
@@ -87,17 +87,17 @@ const MutatePage = () => {
             type="text"
             value={nftKitTokenId}
             onChange={(e) => setNftKitTokenId(e.target.value)}
-            placeholder="Enter your NFT Whale Token ID"
+            placeholder="Whale Token ID"
             style={{ backgroundColor: "black" }}
           />
           <input
             type="text"
             value={nftPotionTokenId}
             onChange={(e) => setNftPotionTokenId(e.target.value)}
-            placeholder="Enter your NFT Potion Token ID"
+            placeholder="Potion Token ID"
             style={{ backgroundColor: "black" }}
           />
-          <Button onClick={handleMutate}>Mutate NFT</Button>
+          <Button $style={{ border: "1px solid white", kind: "radius" }} onClick={handleMutate}>Mutate NFT</Button>
       </Flex>
       <Footer />
     </Flex>
