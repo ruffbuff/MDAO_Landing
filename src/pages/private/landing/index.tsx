@@ -194,7 +194,7 @@ export default function MpLandingPage() {
                             <Heading level={4}>Setup your wallet</Heading>
                             <P $style={{
                                 align: "center"
-                            }}>Set up your wallet of choice. Connect it to the MustachePlace by clicking the "Welcome" in the top right corner.</P>
+                            }}>Set up your wallet of choice. Connect it to the MustachePlace by clicking the "Connect" in the top right corner.</P>
                         </Flex>
                     </Flex>
                     <Flex $style={{
