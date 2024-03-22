@@ -110,7 +110,7 @@ const SalePage = () => {
             <Span $style={{ size: "16px", fontWeight: "bold", align: "center" }}>Mint price: 0 $MATIC</Span>
             <Span>Total Potions Minted: {totalPotions !== null ? totalPotions : 'Loading...'}</Span>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-              <Span $style={{ size: "14px", fontWeight: "bold", color: "gray" }}>1. Mystery</Span>
+              <Span $style={{ size: "14px", fontWeight: "bold", color: "cyan" }}>1. Mystery</Span>
               <Span $style={{ size: "14px", fontWeight: "bold", color: "gray" }}>2. White List</Span>
               <Span $style={{ size: "14px", fontWeight: "bold", color: "gray" }}>3. Public</Span>
             </div>
