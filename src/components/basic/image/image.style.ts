@@ -8,7 +8,8 @@ export interface StyledImagePropsType {
     right?: string,
     bottom?: string,
     radius?: string,
-    maxW?: string
+    maxW?: string,
+    transform?: string
 }
 
 type QueryType = { [key: string]: Partial<StyledImagePropsType> };
@@ -25,7 +26,8 @@ const setStyle = ({
     left,
     bottom,
     radius,
-    maxW
+    maxW,
+    transform
 }: Partial<StyledImagePropsType>) => {
     return `
 		${flex ? `flex:				${flex};` : ``}
@@ -36,6 +38,7 @@ const setStyle = ({
 		${bottom ? `bottom:				${bottom};` : ``}
 		${radius ? `border-radius:				${radius};` : ``}
 		${maxW ? `max-width:				${maxW};` : ``}
+        ${transform ? `transform:				${transform};` : ``}
 	`
 }
 

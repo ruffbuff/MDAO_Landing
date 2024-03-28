@@ -61,7 +61,7 @@ const SalePage = () => {
   return (
     <div>
       <Flex $style={{
-        gap: "2rem",
+        gap: "2rem", // change to 1, after add alert
         fDirection: "column",
         minH: "100vh",
         vAlign: "center",
@@ -73,15 +73,28 @@ const SalePage = () => {
         <Flex $style={{
           fDirection: "column",
           justifyContent: "center",
-          gap: "2rem",
+          gap: "1rem",
           alignItems: "center",
           p: "2rem",
           fWrap: "wrap"
         }}>
-          {/*<Alert style={{ backgroundColor: "#F5F5F5", padding: "1rem", marginBottom: "1rem" }}>
-            <Span $style={{ size: "16px", fontWeight: "bold", color: "#555" }}> Bonus Bot Activated! </Span>
-            <Span $style={{ size: "14px", color: "#333" }}>Mint now for a chance to win Special Bonus! </Span>
-          </Alert>*/}
+          <div style={{ position: 'relative', backgroundColor: "transparent", padding: "1rem", marginBottom: "1rem" }}>
+            <Image
+                src={appConstants.Imgs.TEST3}
+                alt="Rotated Icon"
+                $style={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '-40px',
+                  transform: 'translate(-50%, -50%) rotate(-45deg)',
+                  maxW: '250px'
+                }}
+            />
+          <Alert style={{ backgroundColor: "#800080", padding: "1rem", marginBottom: "1rem" }}>
+            <Span $style={{ size: "16px", fontWeight: "bold", m: "0 0.5rem 0 0" }}>Bonus Bot Activated!</Span>
+            <Span $style={{ size: "14px", color: "#333" }}>Mint now for a chance to win Bonus!</Span>
+          </Alert>
+          </div>        
           <Flex $style={{
             fDirection: "column",
             gap: "1rem",
